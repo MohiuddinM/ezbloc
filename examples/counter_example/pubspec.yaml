@@ -1,0 +1,33 @@
+name: counter_example
+description: Example application for no_bloc
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  equatable: ^2.0.0
+  path_provider:
+  path:
+  path_provider_windows: ^2.0.0
+  ezbloc_flutter:
+    path: ../../ezbloc_flutter/
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  test: ^1.16.5
+  mockito: ^5.0.0
+
+dependency_overrides:
+  ezbloc:
+    path: ../../ezbloc/
+  test_api: 0.3.0
+
+flutter:
+  uses-material-design: true
