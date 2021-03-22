@@ -1,4 +1,5 @@
 import 'package:ezbloc/ezbloc.dart';
+import 'package:ezbloc_flutter/src/logger.dart';
 import 'package:flutter/widgets.dart';
 
 /// Takes [context] and [arg], returns a [Bloc]
@@ -29,6 +30,7 @@ class TypeAndArg {
 /// Generally, applications would [add] all the blocs which would be required any where in the application.
 /// And then [get] them whenever they are needed
 class BlocContainer {
+  static const _log = EzBlocLogger('BlocContainer');
   static final Map<Type, BlocWithArgBuilder> _blocs = {};
   static final Map<TypeAndArg, Bloc> _cache = {};
 
@@ -64,8 +66,15 @@ class BlocContainer {
     }
 
     final cacheKey = TypeAndArg(R, arg);
+    final cachedBloc =
+        _cache.putIfAbsent(cacheKey, () => _blocs[R]!(context, arg)) as R;
+    final numCached = _cache.keys.where((e) => e.type == R).length;
 
-    return _cache.putIfAbsent(cacheKey, () => _blocs[R]!(context, arg)) as R;
+    if (numCached > 2) {
+      _log.warning('you have already cached $numCached ${R}s');
+    }
+
+    return cachedBloc;
   }
 
   /// Removes blocs from the container cache
