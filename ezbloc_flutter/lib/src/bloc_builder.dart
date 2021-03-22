@@ -16,9 +16,9 @@ class BlocBuilder<S> extends StatelessWidget {
   final Bloc<S> bloc;
 
   /// This is called when ever there is a valid state update in the provided bloc (setState)
-  final DataBuilder<S> onUpdate;
+  final DataBuilder<S> onState;
 
-  /// This is called whenever the bloc set its onBusy flag (setBusy)
+  /// This is called whenever the bloc sets the onBusy flag (setBusy)
   final WidgetBuilder? onBusy;
 
   /// This is called whenever the bloc sets an error (setError)
@@ -27,7 +27,7 @@ class BlocBuilder<S> extends StatelessWidget {
   const BlocBuilder({
     Key? key,
     required this.bloc,
-    required this.onUpdate,
+    required this.onState,
     this.onBusy,
     this.onError,
   }) : super(key: key);
@@ -66,7 +66,7 @@ class BlocBuilder<S> extends StatelessWidget {
                 StateError('null data was sent on an active connection'));
           }
 
-          return onUpdate(context, s.data!);
+          return onState(context, s.data!);
         }
 
         throw StateError('${s.connectionState}, ${s.data}, ${s.error}');

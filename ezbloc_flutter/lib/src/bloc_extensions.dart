@@ -9,7 +9,7 @@ import 'bloc_builder.dart';
 extension BlocExtensions<S> on Bloc<S> {
   Widget builder({
     Key? key,
-    required DataBuilder<S> onUpdate,
+    required DataBuilder<S> onState,
     WidgetBuilder? onBusy,
     ErrorBuilder? onError,
   }) {
@@ -41,7 +41,7 @@ extension BlocExtensions<S> on Bloc<S> {
 
     return BlocBuilder<S>(
       key: key,
-      onUpdate: onUpdate,
+      onState: onState,
       onError: onError,
       onBusy: onBusy,
       bloc: this,
