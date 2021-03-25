@@ -46,12 +46,12 @@ class MyApp extends StatelessWidget {
             children: [
               Text('You have pushed the button this many times:'),
               BlocContainer.get<CounterBloc>(arg: 1).builder(
-                onUpdate: (context, int data) => Text(data.toString(),
+                onState: (context, int data) => Text(data.toString(),
                     style: Theme.of(context).textTheme.headline4),
                 onError: (_, e) => Text('Error Occurred'),
               ),
               BlocContainer.get<CounterBloc>(arg: 2).builder(
-                onUpdate: (context, int data) => Text(data.toString(),
+                onState: (context, int data) => Text(data.toString(),
                     style: Theme.of(context).textTheme.headline4),
                 onError: (_, e) => Text('Error Occurred'),
               ),
