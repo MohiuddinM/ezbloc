@@ -22,8 +22,8 @@ extension BlocExtensions<S> on Bloc<S> {
 
             return Center(
               child: SizedBox(
-                width: min(80, crts.maxWidth),
-                height: min(80, crts.maxHeight),
+                width: min(60, crts.maxWidth),
+                height: min(60, crts.maxHeight),
                 child: CircularProgressIndicator.adaptive(),
               ),
             );
