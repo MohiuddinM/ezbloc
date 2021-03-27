@@ -1,6 +1,6 @@
 name: ezbloc
 description: Make bloc easy again! A simple and low boilerplate implementation of the bloc state management pattern. Includes extras to work with blocs like testing, monitoring and persistence.
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/MohiuddinM/ezbloc
 
 environment:
