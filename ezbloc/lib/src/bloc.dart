@@ -11,8 +11,20 @@ import 'logger.dart';
 /// [R] is the type which subclasses [Bloc]
 /// [S] is the type of [value] which this bloc broadcasts. [S] must implement equality
 abstract class Bloc<S> {
+  static const bool _kReleaseMode =
+      bool.fromEnvironment('dart.vm.product', defaultValue: false);
   static const _log = EzBlocLogger('Bloc');
+
+  /// This library requires the state type to either be a primitive or override == operator.
+  /// Set this to false if you manually override ==.
   static bool checkIfValueType = true;
+
+  /// If set to true, the calling function's name will be used as event name,
+  /// if event name is not already set.
+  /// Library uses StackTrace [_caller] to find name of calling function, and
+  /// this is not always possible.
+  static bool callerAsEventName = false;
+
   final BlocMonitor _monitor;
 
   StateError? _error;
@@ -97,6 +109,10 @@ abstract class Bloc<S> {
   @protected
   void setState(S update, {String? event}) {
     assert(isValueType(update));
+    if (!_kReleaseMode && callerAsEventName) {
+      event ??= _caller;
+    }
+
     final _stream = this._stream;
     _monitor.onEvent(runtimeType.toString(), _state, update, event: event);
     _isBusy = false;
@@ -121,6 +137,10 @@ abstract class Bloc<S> {
   @protected
   void setError(StateError error, {String? event}) {
     if (_error == error) return;
+    if (!_kReleaseMode && callerAsEventName) {
+      event ??= _caller;
+    }
+
     _monitor.onError(runtimeType.toString(), error, event: event);
     _isBusy = false;
     _error = error;
@@ -135,6 +155,9 @@ abstract class Bloc<S> {
   @protected
   void setBusy({String? event}) {
     if (_isBusy) return;
+    if (!_kReleaseMode && callerAsEventName) {
+      event ??= _caller;
+    }
     _monitor.onBusy(runtimeType.toString(), event: event);
     _isBusy = true;
     _error = null;
@@ -158,6 +181,19 @@ abstract class Bloc<S> {
       _monitor.onStreamDispose(runtimeType.toString());
       await _stream!.close();
       _stream = null;
+    }
+  }
+
+  String? get _caller {
+    try {
+      final first = StackTrace.current
+          .toString()
+          .split('#')
+          .firstWhere((e) => e.contains(runtimeType.toString()));
+
+      return first.substring(7).split(' ').first.split('.').last;
+    } catch (e) {
+      return null;
     }
   }
 }
