@@ -1,12 +1,12 @@
 import 'package:ezbloc/ezbloc.dart';
 import 'package:flutter/widgets.dart';
 
-/// This function takes a context and [data] of type [T] and returns a widget
+/// This function takes a [context] and [data] of type [T] and returns a widget
 ///
 /// Used when bloc updates its state and widget needs to rebuild with new data
 typedef DataBuilder<T> = Widget Function(BuildContext context, T data);
 
-/// This function takes a context and a [StateError] [error] and returns a widget
+/// This function takes a [context] and an [error] and returns a widget
 ///
 /// Used when bloc sets an error and an error widget should be built to show that error
 typedef ErrorBuilder = Widget Function(BuildContext context, StateError error);
@@ -15,7 +15,7 @@ class BlocBuilder<S> extends StatelessWidget {
   /// Bloc whose broadcasts  this builder listens to
   final Bloc<S> bloc;
 
-  /// This is called when ever there is a valid state update in the provided bloc (setState)
+  /// This is called whenever there is a valid state update in the provided bloc (setState)
   final DataBuilder<S> onState;
 
   /// This is called whenever the bloc sets the onBusy flag (setBusy)
@@ -45,7 +45,8 @@ class BlocBuilder<S> extends StatelessWidget {
             return onBusy!(context);
           } else {
             throw Exception(
-                'you must define onBusy function if your bloc uses "setBusy()"');
+              'you must define onBusy function if your bloc uses "setBusy()"',
+            );
           }
         }
 
@@ -54,7 +55,8 @@ class BlocBuilder<S> extends StatelessWidget {
             return onError!(context, bloc.error);
           } else {
             throw ArgumentError(
-                'you must define onError if your bloc uses "setError()"');
+              'you must define onError if your bloc uses "setError()"',
+            );
           }
         }
 
