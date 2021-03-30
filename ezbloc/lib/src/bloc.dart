@@ -92,7 +92,7 @@ abstract class Bloc<S> {
   /// If this function returns null, nothing will be broadcast
   @protected
   S? nextState(S? currentState, S update) {
-    if (currentState == update && !_isBusy && !hasError) {
+    if (currentState == update && !(_isBusy || hasError)) {
       _log.error('broadcast has been rejected because the update is equal '
           'to the already set state. If you only want to rebuild'
           ' UI, use refresh() instead');
@@ -115,9 +115,9 @@ abstract class Bloc<S> {
 
     final _stream = this._stream;
     _monitor.onEvent(runtimeType.toString(), _state, update, event: event);
+    final next = nextState(_state, update);
     _isBusy = false;
     _error = null;
-    final next = nextState(_state, update);
 
     if (next == null) {
       return;

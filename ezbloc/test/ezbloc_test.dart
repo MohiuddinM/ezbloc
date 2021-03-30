@@ -71,6 +71,29 @@ void main() {
     );
 
     testBloc<CounterBloc, int>(
+      'same state can be broadcast if busy or error has been set',
+      bloc: () async => CounterBloc(0),
+      expectedStates: emitsInOrder([0, 0, 0]),
+      job: (bloc) async {
+        // ignore: invalid_use_of_protected_member
+        bloc.setState(0);
+
+        // ignore: invalid_use_of_protected_member
+        bloc.setBusy();
+
+        // ignore: invalid_use_of_protected_member
+        bloc.setState(0);
+
+        // ignore: invalid_use_of_protected_member
+        bloc.setError(StateError(''));
+
+        // ignore: invalid_use_of_protected_member
+        bloc.setState(0);
+
+      },
+    );
+
+    testBloc<CounterBloc, int>(
       'setting busy should not change value',
       bloc: () async => CounterBloc(0),
       expectBefore: (bloc) async => expect(bloc.isBusy, false),
