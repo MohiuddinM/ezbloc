@@ -1,7 +1,11 @@
+## 0.1.1
+
+- update packages
+- remove isValueType
+
 ## 0.1.0+2
 
 - changed git url
-
 
 ## 0.1.0+1
 
