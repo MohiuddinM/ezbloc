@@ -1,3 +1,8 @@
+## 1.2.0
+
+- Remove is value type
+- Fixed default timeout value for tests
+
 ## 1.1.2
 
 - Fixed bug
