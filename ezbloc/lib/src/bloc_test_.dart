@@ -39,7 +39,7 @@ void testBloc<R extends Bloc<S>, S>(
 
   /// Any conversions which will be performed on the state before it is matched against [expectedStates]
   BlocTestTransform<S, dynamic>? transform,
-  Duration timeout = const Duration(seconds: 1),
+  Duration timeout = const Duration(minutes: 1),
 }) async {
   test(description, () async {
     if (setup != null) {
