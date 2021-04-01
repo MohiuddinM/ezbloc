@@ -17,7 +17,8 @@ abstract class Bloc<S> {
 
   /// This library requires the state type to either be a primitive or override == operator.
   /// Set this to false if you manually override ==.
-  static bool checkIfValueType = true;
+  @Deprecated('has no use, will be removed in future')
+  static bool checkIfValueType = false;
 
   /// If set to true, the calling function's name will be used as event name,
   /// if event name is not already set.
@@ -37,7 +38,6 @@ abstract class Bloc<S> {
       : _state = initialState,
         _monitor = monitor {
     _monitor.onInit(runtimeType.toString(), _state);
-    if (initialState != null) assert(isValueType(initialState));
     if (_state != null) {
       _isBusy = false;
     }
@@ -108,7 +108,6 @@ abstract class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setState]
   @protected
   void setState(S update, {String? event}) {
-    assert(isValueType(update));
     if (!_kReleaseMode && callerAsEventName) {
       event ??= _caller;
     }
@@ -196,16 +195,4 @@ abstract class Bloc<S> {
       return null;
     }
   }
-}
-
-/// Just a utility function to make sure if the state type implements equality (by default dart classes only support referential equality).
-///
-/// This library will not work if equality is not implemented. If you are manually overriding == and hashCode for your classes
-/// instead of using [Equatable] or [Built], then you have to set [Bloc.checkIfValueType] to false, to avoid getting false errors.
-bool isValueType(value) {
-  return (!Bloc.checkIfValueType ||
-      value is num ||
-      value is String ||
-      value is DateTime ||
-      value is bool);
 }
