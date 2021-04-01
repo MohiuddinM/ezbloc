@@ -52,9 +52,6 @@ class BlocContainer {
     arg,
     bool useCache = true,
   }) {
-    assert(arg == null || isValueType(arg),
-        '${arg.runtimeType} does not implement equality ');
-
     if (!_blocs.containsKey(R)) {
       throw ArgumentError(
         '$R was not found in this container. Did you forgot to add() it',
