@@ -1,3 +1,8 @@
+## 1.3.0
+
+- setError's error is dynamic
+- callerAsEventName can be used in release mode
+
 ## 1.2.0
 
 - Remove is value type
