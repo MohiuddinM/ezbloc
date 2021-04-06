@@ -11,3 +11,5 @@ export 'src/bloc_list_builder.dart';
 export 'src/list_bloc.dart';
 export 'src/bloc_extensions.dart';
 export 'src/bloc_test_.dart';
+export 'src/bloc_provider.dart';
+export 'src/context_extensions.dart';
