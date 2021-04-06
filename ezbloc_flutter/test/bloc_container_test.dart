@@ -22,7 +22,6 @@ void main() {
     final bloc = BlocContainer.get<CounterBloc>(arg: 1);
     final bloc2 = BlocContainer.get<CounterBloc>(arg: 1);
 
-
     expect(bloc, bloc2);
   });
 
@@ -65,25 +64,25 @@ void main() {
     expect(bloc2.runtimeType, isNot(CounterBloc));
   });
 
-  test('clear should remove all blocs from container',
-          () {
-        BlocContainer.add((context, arg) => CounterBloc());
-        BlocContainer.add((context, arg) => CounterBloc2());
+  test('clear should remove all blocs from container', () {
+    BlocContainer.add((context, arg) => CounterBloc());
+    BlocContainer.add((context, arg) => CounterBloc2());
 
-        BlocContainer.clear();
+    BlocContainer.clear();
 
-        expect(() => BlocContainer.get<CounterBloc>(), throwsArgumentError);
-        expect(() => BlocContainer.get<CounterBloc2>(), throwsArgumentError);
-   });
+    expect(() => BlocContainer.get<CounterBloc>(), throwsArgumentError);
+    expect(() => BlocContainer.get<CounterBloc2>(), throwsArgumentError);
+  });
 
-  test('clear called with a type should only remove blocs of that type from container',
-          () {
-        BlocContainer.add((context, arg) => CounterBloc());
-        BlocContainer.add((context, arg) => CounterBloc2());
+  test(
+      'clear called with a type should only remove blocs of that type from container',
+      () {
+    BlocContainer.add((context, arg) => CounterBloc());
+    BlocContainer.add((context, arg) => CounterBloc2());
 
-        BlocContainer.clear(CounterBloc);
+    BlocContainer.clear(CounterBloc);
 
-        expect(() => BlocContainer.get<CounterBloc>(), throwsArgumentError);
-        expect(BlocContainer.get<CounterBloc2>(), isA<CounterBloc2>());
-      });
+    expect(() => BlocContainer.get<CounterBloc>(), throwsArgumentError);
+    expect(BlocContainer.get<CounterBloc2>(), isA<CounterBloc2>());
+  });
 }
