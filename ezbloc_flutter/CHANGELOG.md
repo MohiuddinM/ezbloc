@@ -1,3 +1,7 @@
+## 0.2.0
+
+- add BlocProvider and context extension
+
 ## 0.1.1
 
 - update packages
