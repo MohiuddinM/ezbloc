@@ -1,12 +1,10 @@
 import 'package:ezbloc/ezbloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 
 import 'bloc_builder.dart';
 import 'bloc_provider.dart';
 import 'bloc_extensions.dart';
 
-@experimental
 extension ContextX<S> on BuildContext {
   S blocValue<R extends Bloc<S>>() {
     final bloc = BlocProvider.of<R>(this);
