@@ -134,15 +134,18 @@ abstract class Bloc<S> {
   /// [isBusy] is cleared whenever an [error] is set
   /// Optional argument [event] is the name of event which is calling [setError]
   @protected
-  void setError(StateError error, {String? event}) {
-    if (_error == error) return;
+  void setError(error, {String? event}) {
+    final e = error is StateError ? error : StateError(error.toString());
+
+    if (_error == e) return;
+
     if (!_kReleaseMode && callerAsEventName) {
       event ??= _caller;
     }
 
-    _monitor.onError(runtimeType.toString(), error, event: event);
+    _monitor.onError(runtimeType.toString(), e, event: event);
     _isBusy = false;
-    _error = error;
+    _error = e;
     _stream?.add(null);
   }
 
