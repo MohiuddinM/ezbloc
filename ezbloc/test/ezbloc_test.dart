@@ -169,7 +169,7 @@ void main() {
       expectedStates: emitsInOrder([10, 11]),
       job: (b) async {
         b.increment();
-        await b.dispose();
+        await b.close();
         expect(b.stream, emits(11));
       },
     );

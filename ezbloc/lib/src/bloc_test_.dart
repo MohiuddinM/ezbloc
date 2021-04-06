@@ -60,7 +60,7 @@ void testBloc<R extends Bloc<S>, S>(
 
     await job!(_bloc);
     // ignore: invalid_use_of_visible_for_testing_member
-    await _bloc.dispose();
+    await _bloc.close();
 
     if (expectAfter != null) {
       await expectAfter(_bloc);

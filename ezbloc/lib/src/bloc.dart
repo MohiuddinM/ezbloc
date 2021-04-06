@@ -178,7 +178,7 @@ abstract class Bloc<S> {
   /// It is not necessary to call this function as the stream is disposed automatically.
   /// But is useful for testing, in cases where otherwise the tester keeps waiting until done.
   @visibleForTesting
-  Future<void> dispose() async {
+  Future<void> close() async {
     if (_stream != null) {
       _monitor.onStreamDispose(runtimeType.toString());
       await _stream!.close();
