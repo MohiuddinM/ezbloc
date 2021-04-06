@@ -24,7 +24,7 @@ abstract class Bloc<S> {
   /// if event name is not already set.
   /// Library uses StackTrace [_caller] to find name of calling function, and
   /// this is not always possible.
-  static bool callerAsEventName = false;
+  static bool callerAsEventName = !_kReleaseMode;
 
   final BlocMonitor _monitor;
 
@@ -108,7 +108,7 @@ abstract class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setState]
   @protected
   void setState(S update, {String? event}) {
-    if (!_kReleaseMode && callerAsEventName) {
+    if (callerAsEventName) {
       event ??= _caller;
     }
 
@@ -139,7 +139,7 @@ abstract class Bloc<S> {
 
     if (_error == e) return;
 
-    if (!_kReleaseMode && callerAsEventName) {
+    if (callerAsEventName) {
       event ??= _caller;
     }
 
@@ -157,7 +157,7 @@ abstract class Bloc<S> {
   @protected
   void setBusy({String? event}) {
     if (_isBusy) return;
-    if (!_kReleaseMode && callerAsEventName) {
+    if (callerAsEventName) {
       event ??= _caller;
     }
     _monitor.onBusy(runtimeType.toString(), event: event);
