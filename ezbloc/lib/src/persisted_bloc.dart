@@ -7,7 +7,7 @@ abstract class AutoPersistedBloc<S> extends PersistedBloc<S> {
   AutoPersistedBloc({
     S? initialState,
     tag,
-    BlocMonitor monitor = const BlocEventsPrinter(),
+    BlocMonitor? monitor,
   }) : super(
           initialState: initialState,
           monitor: monitor,
@@ -24,7 +24,7 @@ abstract class PersistedBloc<S> extends Bloc<S> {
 
   PersistedBloc({
     S? initialState,
-    BlocMonitor monitor = const BlocEventsPrinter(),
+    BlocMonitor? monitor,
     this.tag = 0,
     bool autoPersistence = false,
     bool recoverStateOnStart = false,

@@ -26,7 +26,7 @@ abstract class Bloc<S> {
   /// this is not always possible.
   static bool callerAsEventName = !_kReleaseMode;
 
-  final BlocMonitor _monitor;
+  final BlocMonitor monitor;
 
   StateError? _error;
   bool _isBusy = true;
@@ -34,10 +34,10 @@ abstract class Bloc<S> {
   S? _state;
 
   /// [initialState] is the state which is set at initialization. if its null, the initial state is set to busy.
-  Bloc({S? initialState, BlocMonitor monitor = const BlocEventsPrinter()})
+  Bloc({S? initialState, BlocMonitor? monitor})
       : _state = initialState,
-        _monitor = monitor {
-    _monitor.onInit(runtimeType.toString(), _state);
+        monitor = monitor ?? BlocEventPrinter() {
+    this.monitor.onInit?.call(this, _state);
     if (_state != null) {
       _isBusy = false;
     }
@@ -49,14 +49,14 @@ abstract class Bloc<S> {
   /// when there are no listeners are left. State change broadcasts are discarded when there
   /// are no listeners.
   Stream<S?> get stream {
-    _monitor.onStreamListener(runtimeType.toString());
+    monitor.onStreamListener?.call(this);
     if (_stream == null) {
       _stream =
           _state == null ? BehaviorSubject<S>() : BehaviorSubject.seeded(state);
 
       _stream!.onCancel = () {
         if (_stream != null && !_stream!.hasListener) {
-          _monitor.onStreamDispose(runtimeType.toString());
+          monitor.onStreamDispose?.call(this);
           _stream!.close();
           _stream = null;
         }
@@ -113,7 +113,7 @@ abstract class Bloc<S> {
     }
 
     final _stream = this._stream;
-    _monitor.onEvent(runtimeType.toString(), _state, update, event: event);
+    monitor.onEvent?.call(this, _state, update, event);
     final next = nextState(_state, update);
     _isBusy = false;
     _error = null;
@@ -125,7 +125,7 @@ abstract class Bloc<S> {
     _state = next;
     if (_stream != null) {
       _stream.add(_state);
-      _monitor.onBroadcast(runtimeType.toString(), _state, event: event);
+      monitor.onBroadcast?.call(this, _state, event);
     }
   }
 
@@ -143,7 +143,7 @@ abstract class Bloc<S> {
       event ??= _caller;
     }
 
-    _monitor.onError(runtimeType.toString(), e, event: event);
+    monitor.onError?.call(this, e, event);
     _isBusy = false;
     _error = e;
     _stream?.add(null);
@@ -160,7 +160,7 @@ abstract class Bloc<S> {
     if (callerAsEventName) {
       event ??= _caller;
     }
-    _monitor.onBusy(runtimeType.toString(), event: event);
+    monitor.onBusy?.call(this, event);
     _isBusy = true;
     _error = null;
     _stream?.add(null);
@@ -180,7 +180,7 @@ abstract class Bloc<S> {
   @visibleForTesting
   Future<void> close() async {
     if (_stream != null) {
-      _monitor.onStreamDispose(runtimeType.toString());
+      monitor.onStreamDispose?.call(this);
       await _stream!.close();
       _stream = null;
     }
