@@ -1,3 +1,7 @@
+## 2.0.0
+
+- Improve BlocMonitor working
+
 ## 1.3.0
 
 - setError's error is dynamic
