@@ -36,7 +36,7 @@ abstract class PersistedBloc<S> extends Bloc<S> {
           monitor: monitor,
         ) {
     if (_autoPersistence && _recoverStateOnStart) {
-      persistenceService.get<S>('value').then((got) {
+      _persistenceService.get<S>('value').then((got) {
         if (got == null) {
           if (initialState != null) {
             // if initialState is null then the bloc's is already set to busy
@@ -49,7 +49,7 @@ abstract class PersistedBloc<S> extends Bloc<S> {
     }
   }
 
-  PersistenceService get persistenceService =>
+  PersistenceService get _persistenceService =>
       PersistenceService('$runtimeType.$tag');
 
   @override
@@ -57,7 +57,7 @@ abstract class PersistedBloc<S> extends Bloc<S> {
     super.setState(update, event: event);
 
     if (state == update && _autoPersistence) {
-      persistenceService.set('value', state);
+      _persistenceService.set('value', state);
     }
   }
 }
