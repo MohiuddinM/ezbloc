@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ezbloc/ezbloc.dart';
 
 import 'bloc_builder.dart';
+import 'logger.dart';
 
 extension BlocExtensions<S> on Bloc<S> {
   Widget builder({
@@ -13,6 +14,8 @@ extension BlocExtensions<S> on Bloc<S> {
     WidgetBuilder? onBusy,
     ErrorBuilder? onError,
   }) {
+    const log = EzBlocLogger('BlocContainer');
+
     onBusy ??= (_) => LayoutBuilder(
           builder: (context, crts) {
             if (crts.maxHeight < 10 || crts.maxWidth < 10) {
@@ -30,13 +33,9 @@ extension BlocExtensions<S> on Bloc<S> {
           },
         );
 
-    onError ??= (_, error) {
-      return Container(
-        color: Colors.red,
-        child: Center(
-          child: Text(error.message),
-        ),
-      );
+    onError ??= (context, error) {
+      log.error(error.message);
+      return onState(context, this.state);
     };
 
     return BlocBuilder<S>(
