@@ -1,3 +1,8 @@
+## 0.3.0
+
+- update packages
+- change onError
+
 ## 0.2.0
 
 - add BlocProvider and context extension
