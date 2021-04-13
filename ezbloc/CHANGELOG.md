@@ -1,3 +1,7 @@
+## 2.1.0
+
+- Add bloc listener functionality
+
 ## 2.0.0
 
 - Improve BlocMonitor working
