@@ -6,17 +6,14 @@ import 'auto_persistence_test.mocks.dart';
 
 class BlocPrinter extends BlocMonitor {
   @override
-  void Function(Bloc bloc, dynamic currentState, dynamic update,
-          String? event)? onEvent =
-      (Bloc blocName, currentState, update, String? event) {
+  void onEvent(String blocName, currentState, update, {String? event}) {
     print('[$blocName] currentState: $currentState, update: $update ($event)');
-  };
+  }
 
   @override
-  void Function(Bloc bloc, dynamic state, String? event)? onBroadcast =
-      (Bloc blocName, state, String? event) {
+  void onBroadcast(String blocName, state, {String? event}) {
     print('[$blocName] broadcast: $state ($event)');
-  };
+  }
 }
 
 class Int {
@@ -41,10 +38,9 @@ class CounterBloc extends AutoPersistedBloc<Int> {
 
   CounterBloc({required this.counterNumber, Int? initialState})
       : super(
-          initialState: initialState,
-          tag: counterNumber,
-          monitor: BlocPrinter(),
-        );
+            initialState: initialState,
+            tag: counterNumber,
+            monitor: BlocPrinter());
 
   void increment() => setState(state + 1, event: 'increment');
 
@@ -59,6 +55,9 @@ void main() {
 
   final counter1 = MockPersistenceService();
   final counter2 = MockPersistenceService();
+
+  setUp(() => Bloc.checkIfValueType = false);
+  tearDownAll(() {});
 
   testBloc<CounterBloc, Int>(
     'bloc should work with hive persistence',
