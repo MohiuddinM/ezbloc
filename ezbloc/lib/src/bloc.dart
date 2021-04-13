@@ -1,8 +1,11 @@
+import 'package:ezbloc/src/bloc_event.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'bloc_monitor.dart';
 import 'logger.dart';
+
+typedef BlocListener = void Function(BlocEventType type);
 
 /// The central class behind this library
 ///
@@ -37,6 +40,7 @@ abstract class Bloc<S> {
   Bloc({S? initialState, BlocMonitor monitor = const BlocEventsPrinter()})
       : _state = initialState,
         _monitor = monitor {
+    notifyListeners(BlocEventType.init);
     _monitor.onInit(runtimeType.toString(), _state);
     if (_state != null) {
       _isBusy = false;
@@ -49,6 +53,7 @@ abstract class Bloc<S> {
   /// when there are no listeners are left. State change broadcasts are discarded when there
   /// are no listeners.
   Stream<S?> get stream {
+    notifyListeners(BlocEventType.newDependent);
     _monitor.onStreamListener(runtimeType.toString());
     if (_stream == null) {
       _stream =
@@ -56,6 +61,7 @@ abstract class Bloc<S> {
 
       _stream!.onCancel = () {
         if (_stream != null && !_stream!.hasListener) {
+          notifyListeners(BlocEventType.streamClosed);
           _monitor.onStreamDispose(runtimeType.toString());
           _stream!.close();
           _stream = null;
@@ -80,6 +86,20 @@ abstract class Bloc<S> {
   bool get hasError => _error != null;
 
   StateError get error => _error!;
+
+  final _eventListeners = <BlocListener>[];
+
+  void addListener(BlocListener callback) {
+    _eventListeners.add(callback);
+  }
+
+  void removeListener(BlocListener callback) {
+    _eventListeners.remove(callback);
+  }
+
+  void notifyListeners(BlocEventType type) {
+    _eventListeners.forEach((e) => e(type));
+  }
 
   /// Called to calculate the new state
   ///
@@ -113,6 +133,7 @@ abstract class Bloc<S> {
     }
 
     final _stream = this._stream;
+    notifyListeners(BlocEventType.event);
     _monitor.onEvent(runtimeType.toString(), _state, update, event: event);
     final next = nextState(_state, update);
     _isBusy = false;
@@ -125,6 +146,7 @@ abstract class Bloc<S> {
     _state = next;
     if (_stream != null) {
       _stream.add(_state);
+      notifyListeners(BlocEventType.stateChange);
       _monitor.onBroadcast(runtimeType.toString(), _state, event: event);
     }
   }
@@ -143,6 +165,7 @@ abstract class Bloc<S> {
       event ??= _caller;
     }
 
+    notifyListeners(BlocEventType.error);
     _monitor.onError(runtimeType.toString(), e, event: event);
     _isBusy = false;
     _error = e;
@@ -160,6 +183,8 @@ abstract class Bloc<S> {
     if (callerAsEventName) {
       event ??= _caller;
     }
+
+    notifyListeners(BlocEventType.busy);
     _monitor.onBusy(runtimeType.toString(), event: event);
     _isBusy = true;
     _error = null;
@@ -180,6 +205,7 @@ abstract class Bloc<S> {
   @visibleForTesting
   Future<void> close() async {
     if (_stream != null) {
+      notifyListeners(BlocEventType.streamClosed);
       _monitor.onStreamDispose(runtimeType.toString());
       await _stream!.close();
       _stream = null;
