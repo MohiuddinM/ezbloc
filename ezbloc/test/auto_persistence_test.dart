@@ -6,13 +6,13 @@ import 'auto_persistence_test.mocks.dart';
 
 class BlocPrinter extends BlocMonitor {
   @override
-  void onEvent(String blocName, currentState, update, {String? event}) {
-    print('[$blocName] currentState: $currentState, update: $update ($event)');
+  void onEvent(bloc, currentState, update, {String? event}) {
+    print('[$bloc] currentState: $currentState, update: $update ($event)');
   }
 
   @override
-  void onBroadcast(String blocName, state, {String? event}) {
-    print('[$blocName] broadcast: $state ($event)');
+  void onBroadcast(bloc, state, {String? event}) {
+    print('[$bloc] broadcast: $state ($event)');
   }
 }
 

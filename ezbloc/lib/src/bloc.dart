@@ -41,7 +41,7 @@ abstract class Bloc<S> {
       : _state = initialState,
         _monitor = monitor {
     notifyListeners(BlocEventType.init);
-    _monitor.onInit(runtimeType.toString(), _state);
+    _monitor.onInit(this, _state);
     if (_state != null) {
       _isBusy = false;
     }
@@ -54,7 +54,7 @@ abstract class Bloc<S> {
   /// are no listeners.
   Stream<S?> get stream {
     notifyListeners(BlocEventType.newDependent);
-    _monitor.onStreamListener(runtimeType.toString());
+    _monitor.onStreamListener(this);
     if (_stream == null) {
       _stream =
           _state == null ? BehaviorSubject<S>() : BehaviorSubject.seeded(state);
@@ -62,7 +62,7 @@ abstract class Bloc<S> {
       _stream!.onCancel = () {
         if (_stream != null && !_stream!.hasListener) {
           notifyListeners(BlocEventType.streamClosed);
-          _monitor.onStreamDispose(runtimeType.toString());
+          _monitor.onStreamDispose(this);
           _stream!.close();
           _stream = null;
         }
@@ -134,7 +134,7 @@ abstract class Bloc<S> {
 
     final _stream = this._stream;
     notifyListeners(BlocEventType.event);
-    _monitor.onEvent(runtimeType.toString(), _state, update, event: event);
+    _monitor.onEvent(this, _state, update, event: event);
     final next = nextState(_state, update);
     _isBusy = false;
     _error = null;
@@ -147,7 +147,7 @@ abstract class Bloc<S> {
     if (_stream != null) {
       _stream.add(_state);
       notifyListeners(BlocEventType.stateChange);
-      _monitor.onBroadcast(runtimeType.toString(), _state, event: event);
+      _monitor.onBroadcast(this, _state, event: event);
     }
   }
 
@@ -166,7 +166,7 @@ abstract class Bloc<S> {
     }
 
     notifyListeners(BlocEventType.error);
-    _monitor.onError(runtimeType.toString(), e, event: event);
+    _monitor.onError(this, e, event: event);
     _isBusy = false;
     _error = e;
     _stream?.add(null);
@@ -185,7 +185,7 @@ abstract class Bloc<S> {
     }
 
     notifyListeners(BlocEventType.busy);
-    _monitor.onBusy(runtimeType.toString(), event: event);
+    _monitor.onBusy(this, event: event);
     _isBusy = true;
     _error = null;
     _stream?.add(null);
@@ -206,7 +206,7 @@ abstract class Bloc<S> {
   Future<void> close() async {
     if (_stream != null) {
       notifyListeners(BlocEventType.streamClosed);
-      _monitor.onStreamDispose(runtimeType.toString());
+      _monitor.onStreamDispose(this);
       await _stream!.close();
       _stream = null;
     }

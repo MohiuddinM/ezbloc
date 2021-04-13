@@ -3,8 +3,8 @@ import 'package:test/test.dart';
 
 class BroadcastPrinter extends BlocMonitor {
   @override
-  void onBroadcast(String blocName, state, {String? event}) {
-    print('[$blocName] broadcast: $state ($event)');
+  void onBroadcast(bloc, state, {String? event}) {
+    print('[$bloc] broadcast: $state ($event)');
   }
 }
 
@@ -89,7 +89,6 @@ void main() {
 
         // ignore: invalid_use_of_protected_member
         bloc.setState(0);
-
       },
     );
 

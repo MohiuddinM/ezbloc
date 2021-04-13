@@ -2,8 +2,8 @@ import 'package:ezbloc/ezbloc.dart';
 
 class BroadcastPrinter extends BlocMonitor {
   @override
-  void onBroadcast(String blocName, state, {String? event}) {
-    print('[$blocName] broadcast: $state ($event)');
+  void onBroadcast(bloc, state, {String? event}) {
+    print('[$bloc] broadcast: $state ($event)');
   }
 }
 
@@ -12,6 +12,7 @@ class CounterBloc extends Bloc<int> {
 
   // event names are optional and only used for debugging purpose
   void increment() => setState(state + 1, event: 'increment');
+
   void decrement() => setState(state - 1, event: 'decrement');
 }
 
