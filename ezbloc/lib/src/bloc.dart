@@ -51,7 +51,7 @@ abstract class Bloc<S> {
         _monitor = monitor {
     _notifyListeners(BlocEventType.init);
     _monitor.onInit(this, _state);
-    if (_state != null) {
+    if (_state != null) {w
       _isBusy = false;
     }
   }
@@ -62,7 +62,6 @@ abstract class Bloc<S> {
   /// when there are no listeners are left. State change broadcasts are discarded when there
   /// are no listeners.
   Stream<S?> get stream {
-    _notifyListeners(BlocEventType.newDependent);
     _monitor.onStreamListener(this);
     if (_stream == null) {
       _stream =
@@ -77,6 +76,8 @@ abstract class Bloc<S> {
         }
       };
     }
+
+    _notifyListeners(BlocEventType.newDependent);
 
     return _stream!.stream;
   }
@@ -180,11 +181,11 @@ abstract class Bloc<S> {
       event ??= _caller;
     }
 
-    _notifyListeners(BlocEventType.error);
     _monitor.onError(this, e, event: event);
     _isBusy = false;
     _error = e;
     _stream?.add(null);
+    _notifyListeners(BlocEventType.error);
   }
 
   /// Called by blocs (subclasses) when the updated state isn't available immediately
@@ -199,11 +200,11 @@ abstract class Bloc<S> {
       event ??= _caller;
     }
 
-    _notifyListeners(BlocEventType.busy);
     _monitor.onBusy(this, event: event);
     _isBusy = true;
     _error = null;
     _stream?.add(null);
+    _notifyListeners(BlocEventType.busy);
   }
 
   /// Broadcasts the same [state]
