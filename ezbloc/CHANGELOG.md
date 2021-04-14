@@ -1,3 +1,7 @@
+## 2.1.2
+
+- Change position of callbacks
+
 ## 2.1.1
 
 - Fix exports
