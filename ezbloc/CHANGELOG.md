@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Fix exports
+
 ## 2.1.0
 
 - Add bloc listener functionality
