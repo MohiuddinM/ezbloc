@@ -51,7 +51,7 @@ abstract class Bloc<S> {
         _monitor = monitor {
     _notifyListeners(BlocEventType.init);
     _monitor.onInit(this, _state);
-    if (_state != null) {w
+    if (_state != null) {
       _isBusy = false;
     }
   }
