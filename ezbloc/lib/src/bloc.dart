@@ -5,6 +5,16 @@ import 'package:rxdart/rxdart.dart';
 import 'bloc_monitor.dart';
 import 'logger.dart';
 
+enum BlocEventType {
+  init,
+  event,
+  error,
+  stateChange,
+  busy,
+  newDependent,
+  streamClosed,
+}
+
 typedef BlocListener = void Function(BlocEventType type);
 
 /// The central class behind this library
