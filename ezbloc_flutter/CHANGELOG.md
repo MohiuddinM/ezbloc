@@ -1,3 +1,7 @@
+## 0.3.2
+
+- fix TypeAndArg equality for lists, sets and maps
+
 ## 0.3.1
 
 - update packages
