@@ -1,5 +1,6 @@
 import 'package:ezbloc/ezbloc.dart';
 import 'package:ezbloc_flutter/src/logger.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 /// Takes [context] and [arg], returns a [Bloc]
@@ -18,8 +19,27 @@ class TypeAndArg {
   TypeAndArg(this.type, this.arg);
 
   @override
-  bool operator ==(Object other) =>
-      other is TypeAndArg && other.type == type && other.arg == arg;
+  bool operator ==(Object other) {
+    if (other is TypeAndArg &&
+        other.type == type &&
+        other.arg.runtimeType == arg.runtimeType) {
+      if (other.arg is List) {
+        return listEquals(other.arg, arg);
+      }
+
+      if (other.arg is Set) {
+        return setEquals(other.arg, arg);
+      }
+
+      if (other.arg is Map) {
+        return mapEquals(other.arg, arg);
+      }
+
+      return true;
+    }
+
+    return false;
+  }
 
   @override
   int get hashCode => type.hashCode + arg.hashCode;
