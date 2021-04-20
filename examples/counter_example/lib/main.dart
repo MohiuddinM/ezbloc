@@ -6,8 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 class BlocPrinter extends BlocMonitor {
   @override
-  void onEvent(String blocName, currentState, update, {String event}) {
-    print('[$blocName] $currentState ($event)');
+  void onEvent(Bloc bloc, currentState, update, {String event}) {
   }
 }
 
