@@ -1,3 +1,7 @@
+## 3.0.0
+
+- Change bloc test transform
+
 ## 2.1.2
 
 - Change position of callbacks
