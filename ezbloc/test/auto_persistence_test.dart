@@ -66,7 +66,7 @@ void main() {
     },
     expectAfter: (bloc) async {},
     bloc: () async => CounterBloc(counterNumber: 1, initialState: Int(0)),
-    transform: (i) => i.value,
+    transform: (bloc, i) => i.value,
     expectedStates: emitsInOrder([0, 1, 0]),
     job: (bloc) async {
       bloc.increment();

@@ -7,7 +7,7 @@ import 'bloc.dart';
 typedef FutureVoidCallback = Future<void> Function();
 typedef BlocCallback<R> = Future<void> Function(R);
 typedef BlocTestBloc<R> = Future<R> Function();
-typedef BlocTestTransform<S, T> = T Function(S);
+typedef BlocTestTransform<R, S, T> = T Function(R, S);
 typedef BlocTestVoidCallback = void Function();
 
 /// Utility function which abstracts over a dart test to ease off bloc testing
@@ -38,7 +38,7 @@ void testBloc<R extends Bloc<S>, S>(
   BlocCallback<R>? job,
 
   /// Any conversions which will be performed on the state before it is matched against [expectedStates]
-  BlocTestTransform<S, dynamic>? transform,
+  BlocTestTransform<R, S, dynamic>? transform,
   Duration timeout = const Duration(minutes: 1),
 }) async {
   test(description, () async {
@@ -49,7 +49,7 @@ void testBloc<R extends Bloc<S>, S>(
     final stream = _bloc.stream.where((event) => event != null);
 
     unawaited(expectLater(
-        transform == null ? stream : stream.map((event) => transform(event!)),
+        transform == null ? stream : stream.map((event) => transform(_bloc, event!)),
         expectedStates));
 
     if (expectBefore != null) {
