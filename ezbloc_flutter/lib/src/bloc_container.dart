@@ -20,9 +20,11 @@ class TypeAndArg {
 
   @override
   bool operator ==(Object other) {
-    if (other is TypeAndArg &&
-        other.type == type &&
-        other.arg.runtimeType == arg.runtimeType) {
+    if (other is! TypeAndArg) {
+      return false;
+    }
+
+    if (other.type == type && other.arg.runtimeType == arg.runtimeType) {
       if (other.arg is List) {
         return listEquals(other.arg, arg);
       }
@@ -35,7 +37,7 @@ class TypeAndArg {
         return mapEquals(other.arg, arg);
       }
 
-      return true;
+      return other.arg == arg;
     }
 
     return false;
@@ -83,8 +85,17 @@ class BlocContainer {
     }
 
     final cacheKey = TypeAndArg(R, arg);
-    final cachedBloc =
-        _cache.putIfAbsent(cacheKey, () => _blocs[R]!(context, arg)) as R;
+
+    R cachedBloc;
+
+    try {
+      final entry = _cache.entries.firstWhere((e) => e.key == cacheKey);
+      cachedBloc = entry.value as R;
+    } catch (e) {
+      cachedBloc = _blocs[R]!(context, arg);
+      _cache[cacheKey] = cachedBloc;
+    }
+
     final numCached = _cache.keys.where((e) => e.type == R).length;
 
     if (numCached > 2) {

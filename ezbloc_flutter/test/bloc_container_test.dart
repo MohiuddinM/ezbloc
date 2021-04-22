@@ -64,6 +64,18 @@ void main() {
     expect(bloc2.runtimeType, isNot(CounterBloc));
   });
 
+  test('container should fetch bloc same blocs if arg is an equal list', () {
+    final list1 = <int>[1, 2, 3];
+    final list2 = <int>[1, 2, 3];
+
+    BlocContainer.add((context, arg) => CounterBloc());
+
+    final bloc1 = BlocContainer.get<CounterBloc>(arg: list1);
+    final bloc2 = BlocContainer.get<CounterBloc>(arg: list2);
+
+    expect(bloc1, bloc2);
+  });
+
   test('clear should remove all blocs from container', () {
     BlocContainer.add((context, arg) => CounterBloc());
     BlocContainer.add((context, arg) => CounterBloc2());
