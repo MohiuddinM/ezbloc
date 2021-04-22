@@ -1,3 +1,7 @@
+## 0.4.0
+
+- update packages
+
 ## 0.3.3
 
 - fix TypeAndArg equality
