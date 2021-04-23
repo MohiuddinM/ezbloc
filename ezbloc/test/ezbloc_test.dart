@@ -197,6 +197,19 @@ void main() {
     );
 
     testBloc<CounterBloc, int>(
+      'transform works with different types',
+      testDistinctStatesOnly: true,
+      bloc: () async => CounterBloc(0),
+      transform: (bloc, state) => state > 0,
+      expectedStates: emitsInOrder([false, true]),
+      job: (b) async {
+        b.increment();
+        b.refresh();
+        b.refresh();
+      },
+    );
+
+    testBloc<CounterBloc, int>(
       'setting busy has no effect on out states',
       testDistinctStatesOnly: true,
       bloc: () async => CounterBloc(0),

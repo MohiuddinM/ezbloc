@@ -47,7 +47,7 @@ void testBloc<R extends Bloc<S>, S>(
       await setup();
     }
     final _bloc = await bloc();
-    var stream = _bloc.stream.where((event) => event != null);
+    Stream stream = _bloc.stream.where((event) => event != null);
 
     if (transform != null) {
       stream = stream.map((event) => transform(_bloc, event!));
