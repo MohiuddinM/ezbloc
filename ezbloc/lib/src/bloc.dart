@@ -210,6 +210,7 @@ abstract class Bloc<S> {
   /// Broadcasts the same [state]
   ///
   /// This method can be used to refresh the UI, without setting a new state.
+  @protected
   void refresh() {
     _stream?.add(_state);
   }
