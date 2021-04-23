@@ -182,5 +182,32 @@ void main() {
         b.refresh();
       },
     );
+
+    testBloc<CounterBloc, int>(
+      'only test distinct transformed states when testDistinctStatesOnly option is set',
+      testDistinctStatesOnly: true,
+      bloc: () async => CounterBloc(0),
+      transform: (bloc, state) => state + 1,
+      expectedStates: emitsInOrder([1, 2]),
+      job: (b) async {
+        b.increment();
+        b.refresh();
+        b.refresh();
+      },
+    );
+
+    testBloc<CounterBloc, int>(
+      'setting busy has no effect on out states',
+      testDistinctStatesOnly: true,
+      bloc: () async => CounterBloc(0),
+      expectedStates: emitsInOrder([0, 1]),
+      job: (b) async {
+        b.increment();
+        b.setBusy();
+        b.refresh();
+        b.setBusy();
+        b.refresh();
+      },
+    );
   });
 }
