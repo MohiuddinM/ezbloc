@@ -231,12 +231,20 @@ abstract class Bloc<S> {
 
   String? get _caller {
     try {
-      final first = StackTrace.current
+      final closest = StackTrace.current
           .toString()
           .split('#')
           .firstWhere((e) => e.contains(runtimeType.toString()));
 
-      return first.substring(7).split(' ').first.split('.').last;
+      final parts = closest.substring(7).split(' ').first.split('.');
+      final lastPart = parts.removeLast();
+      final secondLastPart = parts.removeLast();
+
+      if (lastPart.contains('<anonymous')) {
+        return secondLastPart;
+      }
+
+      return lastPart;
     } catch (e) {
       return null;
     }
