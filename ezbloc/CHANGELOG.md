@@ -1,3 +1,7 @@
+## 3.1.2
+
+- fix type bug
+
 ## 3.1.1
 
 - handle distinct transformed events
