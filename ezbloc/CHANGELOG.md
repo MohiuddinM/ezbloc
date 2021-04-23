@@ -1,3 +1,7 @@
+## 3.1.0
+
+- add option to test distinct states only
+
 ## 3.0.0
 
 - Change bloc test transform
