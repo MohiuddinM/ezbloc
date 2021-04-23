@@ -47,19 +47,17 @@ void testBloc<R extends Bloc<S>, S>(
       await setup();
     }
     final _bloc = await bloc();
-    var stream = _bloc.stream;
+    var stream = _bloc.stream.where((event) => event != null);
+
+    if (transform != null) {
+      stream = stream.map((event) => transform(_bloc, event!));
+    }
 
     if (testDistinctStatesOnly) {
       stream = stream.distinct();
     }
 
-    stream = stream.where((event) => event != null);
-
-    unawaited(expectLater(
-        transform == null
-            ? stream
-            : stream.map((event) => transform(_bloc, event!)),
-        expectedStates));
+    unawaited(expectLater(stream, expectedStates));
 
     if (expectBefore != null) {
       await expectBefore(_bloc);
