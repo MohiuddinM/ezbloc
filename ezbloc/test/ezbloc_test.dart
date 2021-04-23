@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:ezbloc/ezbloc.dart';
 import 'package:test/test.dart';
 
@@ -57,15 +59,10 @@ void main() {
       bloc: () async => CounterBloc(0),
       expectedStates: emitsInOrder([0, 1, 2]),
       job: (bloc) async {
-        // ignore: invalid_use_of_protected_member
         bloc.setState(0);
-        // ignore: invalid_use_of_protected_member
         bloc.setState(1);
-        // ignore: invalid_use_of_protected_member
         bloc.setState(1);
-        // ignore: invalid_use_of_protected_member
         bloc.setState(2);
-        // ignore: invalid_use_of_protected_member
         bloc.setState(2);
       },
     );
@@ -75,19 +72,10 @@ void main() {
       bloc: () async => CounterBloc(0),
       expectedStates: emitsInOrder([0, 0, 0]),
       job: (bloc) async {
-        // ignore: invalid_use_of_protected_member
         bloc.setState(0);
-
-        // ignore: invalid_use_of_protected_member
         bloc.setBusy();
-
-        // ignore: invalid_use_of_protected_member
         bloc.setState(0);
-
-        // ignore: invalid_use_of_protected_member
         bloc.setError(StateError(''));
-
-        // ignore: invalid_use_of_protected_member
         bloc.setState(0);
       },
     );
@@ -103,7 +91,6 @@ void main() {
       expectedStates: emitsInOrder([0, 1]),
       job: (bloc) async {
         bloc.increment();
-        // ignore: invalid_use_of_protected_member
         bloc.setBusy();
       },
     );
@@ -119,7 +106,6 @@ void main() {
       expectedStates: emitsInOrder([0, 1]),
       job: (bloc) async {
         bloc.increment();
-        // ignore: invalid_use_of_protected_member
         bloc.setError(StateError('error'));
       },
     );
@@ -170,6 +156,30 @@ void main() {
         b.increment();
         await b.close();
         expect(b.stream, emits(11));
+      },
+    );
+
+    testBloc<CounterBloc, int>(
+      'test non distinct states when testDistinctStatesOnly option is false',
+      testDistinctStatesOnly: false,
+      bloc: () async => CounterBloc(0),
+      expectedStates: emitsInOrder([0, 1, 1, 1]),
+      job: (b) async {
+        b.increment();
+        b.refresh();
+        b.refresh();
+      },
+    );
+
+    testBloc<CounterBloc, int>(
+      'only test distinct states when testDistinctStatesOnly option is set',
+      testDistinctStatesOnly: true,
+      bloc: () async => CounterBloc(0),
+      expectedStates: emitsInOrder([0, 1]),
+      job: (b) async {
+        b.increment();
+        b.refresh();
+        b.refresh();
       },
     );
   });

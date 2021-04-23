@@ -40,16 +40,25 @@ void testBloc<R extends Bloc<S>, S>(
   /// Any conversions which will be performed on the state before it is matched against [expectedStates]
   BlocTestTransform<R, S, dynamic>? transform,
   Duration timeout = const Duration(minutes: 1),
+  bool testDistinctStatesOnly = false,
 }) async {
   test(description, () async {
     if (setup != null) {
       await setup();
     }
     final _bloc = await bloc();
-    final stream = _bloc.stream.where((event) => event != null);
+    var stream = _bloc.stream;
+
+    if (testDistinctStatesOnly) {
+      stream = stream.distinct();
+    }
+
+    stream = stream.where((event) => event != null);
 
     unawaited(expectLater(
-        transform == null ? stream : stream.map((event) => transform(_bloc, event!)),
+        transform == null
+            ? stream
+            : stream.map((event) => transform(_bloc, event!)),
         expectedStates));
 
     if (expectBefore != null) {
