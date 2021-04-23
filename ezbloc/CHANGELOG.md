@@ -1,3 +1,7 @@
+## 3.1.1
+
+- handle distinct transformed events
+
 ## 3.1.0
 
 - add option to test distinct states only
