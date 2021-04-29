@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 import 'package:pedantic/pedantic.dart';
+import 'package:stack_trace/stack_trace.dart';
 import 'package:test/test.dart';
 
 import 'bloc.dart';
@@ -42,10 +45,17 @@ void testBloc<R extends Bloc<S>, S>(
   Duration timeout = const Duration(minutes: 1),
   bool testDistinctStatesOnly = false,
 }) async {
+  final frames = Chain.current().toTrace().terse.frames;
+  final index = frames.indexWhere((element) {
+    return element.member?.startsWith('main') ?? false;
+  });
+  final trace = frames[index].toString();
+
   test(description, () async {
     if (setup != null) {
       await setup();
     }
+
     final _bloc = await bloc();
     Stream stream = _bloc.stream.where((event) => event != null);
 
@@ -57,7 +67,11 @@ void testBloc<R extends Bloc<S>, S>(
       stream = stream.distinct();
     }
 
-    unawaited(expectLater(stream, expectedStates));
+    unawaited(expectLater(stream, expectedStates).onError(
+      (error, stackTrace) {
+        throw '$trace \n\n $error';
+      },
+    ));
 
     if (expectBefore != null) {
       await expectBefore(_bloc);
