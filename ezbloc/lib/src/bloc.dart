@@ -128,13 +128,6 @@ abstract class Bloc<S> {
   /// If this function returns null, nothing will be broadcast
   @protected
   S? nextState(S? currentState, S update) {
-    if (currentState == update && !(_isBusy || hasError)) {
-      _log.error('broadcast has been rejected because the update is equal '
-          'to the already set state. If you only want to rebuild'
-          ' UI, use refresh() instead');
-      return null;
-    }
-
     return update;
   }
 
