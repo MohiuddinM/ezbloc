@@ -1,3 +1,7 @@
+## 3.1.3
+
+- minor changes
+
 ## 3.1.2
 
 - fix type bug
