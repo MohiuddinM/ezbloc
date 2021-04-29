@@ -82,7 +82,7 @@ abstract class Bloc<S> {
     return _stream!.stream;
   }
 
-  S get state {
+  S? get state {
     final _state = this._state;
     if (_state != null) {
       return _state;

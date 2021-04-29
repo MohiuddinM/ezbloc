@@ -13,9 +13,9 @@ class BroadcastPrinter extends BlocMonitor {
 class CounterBloc extends Bloc<int> {
   CounterBloc([int? initialState]) : super(initialState: initialState);
 
-  void increment() => setState(state + 1);
+  void increment() => setState(state! + 1);
 
-  void decrement() => setState(state - 1);
+  void decrement() => setState(state! - 1);
 }
 
 class IncrementOnlyCounterBloc extends Bloc<int> {
@@ -27,9 +27,9 @@ class IncrementOnlyCounterBloc extends Bloc<int> {
     return update > (currentState ?? 0) ? update : null;
   }
 
-  void increment() => setState(state + 1, event: 'increment');
+  void increment() => setState(state! + 1, event: 'increment');
 
-  void decrement() => setState(state - 1, event: 'decrement');
+  void decrement() => setState(state! - 1, event: 'decrement');
 }
 
 void main() {
@@ -51,19 +51,6 @@ void main() {
         bloc.increment();
         bloc.increment();
         bloc.decrement();
-      },
-    );
-
-    testBloc<CounterBloc, int>(
-      'only unique states should be broadcast',
-      bloc: () async => CounterBloc(0),
-      expectedStates: emitsInOrder([0, 1, 2]),
-      job: (bloc) async {
-        bloc.setState(0);
-        bloc.setState(1);
-        bloc.setState(1);
-        bloc.setState(2);
-        bloc.setState(2);
       },
     );
 
