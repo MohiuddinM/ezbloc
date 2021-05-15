@@ -35,7 +35,18 @@ extension BlocExtensions<S> on Bloc<S> {
 
     onError ??= (context, error) {
       log.error(error.message);
-      return onState(context, this.state);
+      final state = this.state;
+
+      if (state != null) {
+        return onState(context, state);
+      }
+
+      return Container(
+        color: Colors.red,
+        child: Center(
+          child: Text(error.message),
+        ),
+      );
     };
 
     return BlocBuilder<S>(

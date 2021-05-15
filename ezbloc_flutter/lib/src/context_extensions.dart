@@ -6,7 +6,7 @@ import 'bloc_provider.dart';
 import 'bloc_extensions.dart';
 
 extension ContextX<S> on BuildContext {
-  S blocValue<R extends Bloc<S>>() {
+  S? blocValue<R extends Bloc<S>>() {
     final bloc = BlocProvider.of<R>(this);
     return bloc.state;
   }

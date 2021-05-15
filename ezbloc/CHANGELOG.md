@@ -1,3 +1,7 @@
+## 3.1.4
+
+- remove nul check
+
 ## 3.1.3
 
 - minor changes

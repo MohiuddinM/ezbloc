@@ -84,11 +84,7 @@ abstract class Bloc<S> {
 
   S? get state {
     final _state = this._state;
-    if (_state != null) {
-      return _state;
-    } else {
-      throw StateError('state is accessed before it is set');
-    }
+    return _state;
   }
 
   bool get isBusy => _isBusy;
