@@ -1,3 +1,7 @@
+## 0.5.0
+
+- add global onError and onBusy arguments
+
 ## 0.4.1
 
 - update packages
