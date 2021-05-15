@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:ezbloc/ezbloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// This function takes a [context] and [data] of type [T] and returns a widget
@@ -10,6 +13,14 @@ typedef DataBuilder<T> = Widget Function(BuildContext context, T data);
 ///
 /// Used when bloc sets an error and an error widget should be built to show that error
 typedef ErrorBuilder = Widget Function(BuildContext context, StateError error);
+
+/// This function takes a [bloc], [context] and returns a widget
+///
+/// Used when bloc an [ErrorBuilder] or a BusyBuilder is not provided to a bloc
+typedef BlocBuilderCallback = Widget Function(
+  BuildContext context,
+  BlocBuilder caller,
+);
 
 class BlocBuilder<S> extends StatelessWidget {
   /// Bloc whose broadcasts  this builder listens to
@@ -24,6 +35,43 @@ class BlocBuilder<S> extends StatelessWidget {
   /// This is called whenever the bloc sets an error (setError)
   final ErrorBuilder? onError;
 
+  /// This is called when there is an error but no [onError] is defined
+  static BlocBuilderCallback globalOnError = (context, caller) {
+    final state = caller.bloc.state;
+    final error = caller.bloc.error;
+
+    if (state != null) {
+      return caller.onState(context, state);
+    }
+
+    return Container(
+      color: Colors.red,
+      child: Center(
+        child: Text(error.message),
+      ),
+    );
+  };
+
+  /// This is called when there is an error but no [onBusy] is defined
+  static BlocBuilderCallback globalOnBusy = (_, __) {
+    return LayoutBuilder(
+      builder: (context, crts) {
+        if (crts.maxHeight < 10 || crts.maxWidth < 10) {
+          // Size is too small to draw a CircularProgressIndicator
+          return const SizedBox();
+        }
+
+        return Center(
+          child: SizedBox(
+            width: min(60, crts.maxWidth),
+            height: min(60, crts.maxHeight),
+            child: CircularProgressIndicator.adaptive(),
+          ),
+        );
+      },
+    );
+  };
+
   const BlocBuilder({
     Key? key,
     required this.bloc,
@@ -34,40 +82,31 @@ class BlocBuilder<S> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // bloc.value can not be accessed here, because we are not sure if it is set or not
-    // and if it is not set, then it will throw an error
-    // bloc uses BehaviorSubject, so bloc.state should immediately return bloc.value if it was set
+    final onBusy = this.onBusy;
+    final onState = this.onState;
+    final onError = this.onError;
+
     return StreamBuilder<S?>(
       stream: bloc.stream,
       builder: (context, s) {
         if (bloc.isBusy || s.connectionState == ConnectionState.waiting) {
           if (onBusy != null) {
-            return onBusy!(context);
+            return onBusy(context);
           } else {
-            throw Exception(
-              'you must define onBusy function if your bloc uses "setBusy()"',
-            );
+            return globalOnBusy(context, this);
           }
         }
 
         if (bloc.hasError) {
           if (onError != null) {
-            return onError!(context, bloc.error);
+            return onError(context, bloc.error);
           } else {
-            throw ArgumentError(
-              'you must define onError if your bloc uses "setError()"',
-            );
+            return globalOnError(context, this);
           }
         }
 
         if (s.connectionState == ConnectionState.active ||
             s.connectionState == ConnectionState.done) {
-          if (s.data == null) {
-            assert(onError != null);
-            return onError!(context,
-                StateError('null data was sent on an active connection'));
-          }
-
           return onState(context, s.data!);
         }
 
