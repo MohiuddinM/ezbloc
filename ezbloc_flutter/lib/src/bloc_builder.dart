@@ -52,7 +52,7 @@ class BlocBuilder<S> extends StatelessWidget {
     );
   };
 
-  /// This is called when there is an error but no [onBusy] is defined
+  /// This is called when there is an busy state but no [onBusy] is defined
   static BlocBuilderCallback globalOnBusy = (_, __) {
     return LayoutBuilder(
       builder: (context, crts) {
