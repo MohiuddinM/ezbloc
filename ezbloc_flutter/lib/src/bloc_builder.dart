@@ -14,12 +14,22 @@ typedef DataBuilder<T> = Widget Function(BuildContext context, T data);
 /// Used when bloc sets an error and an error widget should be built to show that error
 typedef ErrorBuilder = Widget Function(BuildContext context, StateError error);
 
-/// This function takes a [bloc], [context] and returns a widget
+/// This function takes a [BuildContext], [Bloc], and a [Widget] and returns a widget
 ///
-/// Used when bloc an [ErrorBuilder] or a BusyBuilder is not provided to a bloc
-typedef BlocBuilderCallback = Widget Function(
+/// Used when bloc an [ErrorBuilder] is not provided to a [BlocBuilder]
+typedef GlobalErrorBuilder = Widget Function(
   BuildContext context,
-  BlocBuilder caller,
+  Bloc bloc,
+  Widget? lastStateBuild,
+);
+
+/// This function takes a [BuildContext], [Bloc], and a [Widget] and returns a widget
+///
+/// Used when bloc an onBusy is not provided to a [BlocBuilder]
+typedef GlobalBusyBuilder = Widget Function(
+  BuildContext context,
+  Bloc bloc,
+  Widget? lastStateBuild,
 );
 
 class BlocBuilder<S> extends StatelessWidget {
@@ -36,12 +46,11 @@ class BlocBuilder<S> extends StatelessWidget {
   final ErrorBuilder? onError;
 
   /// This is called when there is an error but no [onError] is defined
-  static BlocBuilderCallback globalOnError = (context, caller) {
-    final state = caller.bloc.state;
-    final error = caller.bloc.error;
+  static GlobalErrorBuilder globalOnError = (context, bloc, lastStateBuild) {
+    final error = bloc.error;
 
-    if (state != null) {
-      return caller.onState(context, state);
+    if (lastStateBuild != null) {
+      return lastStateBuild;
     }
 
     return Container(
@@ -53,7 +62,7 @@ class BlocBuilder<S> extends StatelessWidget {
   };
 
   /// This is called when there is an busy state but no [onBusy] is defined
-  static BlocBuilderCallback globalOnBusy = (_, __) {
+  static GlobalBusyBuilder globalOnBusy = (_, __, ___) {
     return LayoutBuilder(
       builder: (context, crts) {
         if (crts.maxHeight < 10 || crts.maxWidth < 10) {
@@ -93,7 +102,11 @@ class BlocBuilder<S> extends StatelessWidget {
           if (onBusy != null) {
             return onBusy(context);
           } else {
-            return globalOnBusy(context, this);
+            return globalOnBusy(
+              context,
+              bloc,
+              s.data != null ? onState(context, s.data!) : null,
+            );
           }
         }
 
@@ -101,7 +114,11 @@ class BlocBuilder<S> extends StatelessWidget {
           if (onError != null) {
             return onError(context, bloc.error);
           } else {
-            return globalOnError(context, this);
+            return globalOnError(
+              context,
+              bloc,
+              s.data != null ? onState(context, s.data!) : null,
+            );
           }
         }
 
