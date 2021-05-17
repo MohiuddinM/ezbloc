@@ -1,3 +1,7 @@
+## 0.5.2
+
+- change last build state condition
+
 ## 0.5.1
 
 - fix global onError and onBusy arguments
