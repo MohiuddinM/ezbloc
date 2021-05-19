@@ -82,9 +82,16 @@ abstract class Bloc<S> {
     return _stream!.stream;
   }
 
-  S? get state {
-    final _state = this._state;
-    return _state;
+  bool get hasState => _state != null;
+
+  S get state {
+    final state = _state;
+
+    if (state != null) {
+      return state;
+    }
+
+    throw ArgumentError.notNull('state');
   }
 
   bool get isBusy => _isBusy;
