@@ -1,5 +1,5 @@
 import 'package:ezbloc_flutter/ezbloc_flutter.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class CounterBloc extends Bloc<int> {
   void increment() => setState(state! + 1);

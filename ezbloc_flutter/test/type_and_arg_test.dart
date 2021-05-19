@@ -1,6 +1,5 @@
 import 'package:ezbloc_flutter/ezbloc_flutter.dart';
-import 'package:test/test.dart';
-
+import 'package:flutter_test/flutter_test.dart';
 import 'bloc_container_test.dart';
 
 void main() => group('TypeAndArg', () {

@@ -1,3 +1,7 @@
+## 0.6.1
+
+- update packages
+
 ## 0.5.2
 
 - change last build state condition

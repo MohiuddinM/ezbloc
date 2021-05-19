@@ -1,3 +1,7 @@
+## 4.0.1
+
+- revert 4.0.0
+
 ## 3.1.4
 
 - remove nul check
