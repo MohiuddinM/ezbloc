@@ -11,9 +11,9 @@ class CounterBloc extends Bloc<int> {
   CounterBloc() : super(initialState: 0, monitor: BroadcastPrinter());
 
   // event names are optional and only used for debugging purpose
-  void increment() => setState(state! + 1, event: 'increment');
+  void increment() => setState(state + 1, event: 'increment');
 
-  void decrement() => setState(state! - 1, event: 'decrement');
+  void decrement() => setState(state - 1, event: 'decrement');
 }
 
 void main() {

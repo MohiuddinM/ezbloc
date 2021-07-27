@@ -42,9 +42,9 @@ class CounterBloc extends AutoPersistedBloc<Int> {
             tag: counterNumber,
             monitor: BlocPrinter());
 
-  void increment() => setState(state! + 1, event: 'increment');
+  void increment() => setState(state + 1, event: 'increment');
 
-  void decrement() => setState(state! - 1, event: 'decrement');
+  void decrement() => setState(state - 1, event: 'decrement');
 }
 
 @GenerateMocks([PersistenceService])
@@ -56,7 +56,7 @@ void main() {
   final counter1 = MockPersistenceService();
   final counter2 = MockPersistenceService();
 
-  setUp(() => Bloc.checkIfValueType = false);
+  setUp(() {});
   tearDownAll(() {});
 
   testBloc<CounterBloc, Int>(

@@ -13,9 +13,9 @@ class BroadcastPrinter extends BlocMonitor {
 class CounterBloc extends Bloc<int> {
   CounterBloc([int? initialState]) : super(initialState: initialState);
 
-  void increment() => setState(state! + 1);
+  void increment() => setState(state + 1);
 
-  void decrement() => setState(state! - 1);
+  void decrement() => setState(state - 1);
 }
 
 class IncrementOnlyCounterBloc extends Bloc<int> {
@@ -27,13 +27,12 @@ class IncrementOnlyCounterBloc extends Bloc<int> {
     return update > (currentState ?? 0) ? update : null;
   }
 
-  void increment() => setState(state! + 1, event: 'increment');
+  void increment() => setState(state + 1, event: 'increment');
 
-  void decrement() => setState(state! - 1, event: 'decrement');
+  void decrement() => setState(state - 1, event: 'decrement');
 }
 
 void main() {
-  Bloc.checkIfValueType = false;
   Bloc.callerAsEventName = true;
   group('bloc tests', () {
     test('bloc stream is broadcast', () {
