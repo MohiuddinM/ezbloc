@@ -1,3 +1,7 @@
+## 0.6.2
+
+- add clear cache function
+
 ## 0.6.1
 
 - update packages
