@@ -1,3 +1,7 @@
+## 4.1.0
+
+- make state getter non-nullable
+
 ## 4.0.1
 
 - revert 4.0.0
