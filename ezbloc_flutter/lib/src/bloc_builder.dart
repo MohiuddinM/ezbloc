@@ -105,7 +105,7 @@ class BlocBuilder<S> extends StatelessWidget {
             return globalOnBusy(
               context,
               bloc,
-              bloc.state != null ? onState(context, bloc.state!) : null,
+              bloc.hasState ? onState(context, bloc.state) : null,
             );
           }
         }
@@ -117,7 +117,7 @@ class BlocBuilder<S> extends StatelessWidget {
             return globalOnError(
               context,
               bloc,
-              bloc.state != null ? onState(context, bloc.state!) : null,
+              bloc.hasState ? onState(context, bloc.state) : null,
             );
           }
         }

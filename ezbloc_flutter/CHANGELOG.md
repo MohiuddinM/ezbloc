@@ -1,3 +1,7 @@
+## 0.6.3
+
+- fix null checks
+
 ## 0.6.2
 
 - add clear cache function
