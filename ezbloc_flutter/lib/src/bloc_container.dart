@@ -105,7 +105,7 @@ class BlocContainer {
     return cachedBloc;
   }
 
-  /// Removes blocs from the container cache
+  /// Removes blocs from the cache
   ///
   /// If a [type] is provided then all blocs of that type are removed.
   /// If a [bloc] is provided then that specific bloc is removed
@@ -117,6 +117,11 @@ class BlocContainer {
     } else if (bloc != null) {
       _cache.removeWhere((key, value) => value == bloc);
     }
+  }
+
+  /// Removes all blocs from the cache
+  static void clearCache() {
+    _cache.clear();
   }
 
   /// Clears blocs from the container
