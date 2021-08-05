@@ -1,3 +1,7 @@
+## 4.1.1
+
+- minor changes
+
 ## 4.1.0
 
 - make state getter non-nullable
