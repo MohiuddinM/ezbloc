@@ -21,6 +21,7 @@ abstract class PersistedBloc<S> extends Bloc<S> {
   final bool _autoPersistence;
   final bool _recoverStateOnStart;
   final Object tag;
+  late PersistenceService _persistenceService;
 
   PersistedBloc({
     S? initialState,
@@ -35,6 +36,8 @@ abstract class PersistedBloc<S> extends Bloc<S> {
               (autoPersistence && recoverStateOnStart) ? null : initialState,
           monitor: monitor,
         ) {
+    _persistenceService = PersistenceService('$runtimeType.$tag');
+
     if (_autoPersistence && _recoverStateOnStart) {
       _persistenceService.get<S>('value').then((got) {
         if (got == null) {
@@ -48,9 +51,6 @@ abstract class PersistedBloc<S> extends Bloc<S> {
       });
     }
   }
-
-  PersistenceService get _persistenceService =>
-      PersistenceService('$runtimeType.$tag');
 
   @override
   void setState(S update, {String? event}) {
