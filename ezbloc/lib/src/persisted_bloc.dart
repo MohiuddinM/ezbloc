@@ -6,7 +6,7 @@ import 'persistence_service.dart';
 abstract class AutoPersistedBloc<S> extends PersistedBloc<S> {
   AutoPersistedBloc({
     S? initialState,
-    tag,
+    Object tag = 0,
     BlocMonitor monitor = const BlocEventsPrinter(),
   }) : super(
           initialState: initialState,
