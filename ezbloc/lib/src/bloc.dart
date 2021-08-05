@@ -2,7 +2,6 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'bloc_monitor.dart';
-import 'logger.dart';
 
 enum BlocEventType {
   init,
@@ -25,7 +24,6 @@ typedef BlocListener = void Function(BlocEventType type);
 abstract class Bloc<S> {
   static const bool _kReleaseMode =
       bool.fromEnvironment('dart.vm.product', defaultValue: false);
-  static const _log = EzBlocLogger('Bloc');
 
   /// This library requires the state type to either be a primitive or override == operator.
   /// Set this to false if you manually override ==.
@@ -64,8 +62,9 @@ abstract class Bloc<S> {
   Stream<S?> get stream {
     _monitor.onStreamListener(this);
     if (_stream == null) {
-      _stream =
-          _state == null ? BehaviorSubject<S>() : BehaviorSubject.seeded(state);
+      _stream = _state == null
+          ? BehaviorSubject<S?>()
+          : BehaviorSubject<S?>.seeded(state);
 
       _stream!.onCancel = () {
         if (_stream != null && !_stream!.hasListener) {
