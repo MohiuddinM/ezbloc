@@ -1,3 +1,7 @@
+## 0.6.4
+
+- update ezbloc
+
 ## 0.6.3
 
 - fix null checks
