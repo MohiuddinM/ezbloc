@@ -38,9 +38,11 @@ class CounterBloc extends AutoPersistedBloc<Int> {
 
   CounterBloc({required this.counterNumber, Int? initialState})
       : super(
-            initialState: initialState,
-            tag: counterNumber,
-            monitor: BlocPrinter());
+          startState: initialState,
+          tag: counterNumber,
+          monitor: BlocPrinter(),
+          deserializer: (j) => Int.fromJson(j),
+        );
 
   void increment() => setState(state + 1, event: 'increment');
 
@@ -49,7 +51,6 @@ class CounterBloc extends AutoPersistedBloc<Int> {
 
 @GenerateMocks([PersistenceService])
 void main() {
-  PersistenceService.addDeserializer((json) => Int.fromJson(json));
   HivePersistenceService.runningInTest = true;
   HivePersistenceService.databaseDirectory = '.';
 
@@ -77,16 +78,16 @@ void main() {
   test('bloc should recover initial state', () async {
     PersistenceService.use(
         (name) => name == 'CounterBloc.1' ? counter1 : counter2);
-    when(counter1.get<Int>(any)).thenAnswer((realInvocation) async => Int(1));
-    when(counter2.get<Int>(any)).thenAnswer((realInvocation) async => Int(2));
+    when(counter1.get(any)).thenAnswer((realInvocation) async => Int(1));
+    when(counter2.get(any)).thenAnswer((realInvocation) async => Int(2));
 
     final bloc1 = CounterBloc(counterNumber: 1);
     final bloc2 = CounterBloc(counterNumber: 2);
 
     expect(bloc1.isBusy, true);
     expect(bloc2.isBusy, true);
-    expect(() => bloc1.state, throwsA(TypeMatcher<StateError>()));
-    expect(() => bloc2.state, throwsA(TypeMatcher<StateError>()));
+    expect(() => bloc1.state, throwsA(TypeMatcher<ArgumentError>()));
+    expect(() => bloc2.state, throwsA(TypeMatcher<ArgumentError>()));
 
     await Future.delayed(Duration(seconds: 1));
 
