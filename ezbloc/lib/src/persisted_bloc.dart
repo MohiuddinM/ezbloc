@@ -37,8 +37,8 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
     });
   }
 
-  bool get _isPrimitive {
-    if (S is num || S is String || S is DateTime || S is bool) {
+  bool _isPrimitive(S v) {
+    if (v is num || v is String || v is DateTime || v is bool) {
       return true;
     }
 
@@ -58,7 +58,7 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
     super.setState(update, event: event);
 
     if (shouldPersist) {
-      final write = _isPrimitive ? update : _serialize(update);
+      final write = _isPrimitive(update) ? update : _serialize(update);
       _persistenceService.set('value', write);
     }
   }
