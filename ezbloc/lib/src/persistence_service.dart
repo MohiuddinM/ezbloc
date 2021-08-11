@@ -9,7 +9,6 @@ typedef Deserializer<T> = T Function(dynamic json);
 abstract class PersistenceService {
   static PersistenceServiceBuilder _builder =
       (name) => HivePersistenceService(name);
-  static Map<Type, Deserializer> deserializers = <Type, Deserializer>{};
 
   static void use(PersistenceServiceBuilder builder) {
     _builder = builder;
@@ -21,15 +20,11 @@ abstract class PersistenceService {
 
   Future<void> set(String key, value);
 
-  Future<T?> get<T>(String key);
+  Future get(String key);
 
   Future<void> clear();
 
   void remove(String key);
-
-  static void addDeserializer<T>(Deserializer<T> deserializer) {
-    deserializers.putIfAbsent(T, () => deserializer);
-  }
 }
 
 class HivePersistenceService implements PersistenceService {
@@ -58,40 +53,9 @@ class HivePersistenceService implements PersistenceService {
   }
 
   @override
-  Future<S?> get<S>(String key) async {
+  Future get(String key) async {
     final box = await _box.future;
-    dynamic value = box.get(key);
-
-    if (value != null && value is! S && (value is String || value is Map)) {
-      if (PersistenceService.deserializers.containsKey(S)) {
-        final deserializer = PersistenceService.deserializers[S];
-        value = deserializer!(value);
-      }
-    }
-
-    assert(
-      value is S || value == null,
-      'the type you are trying to get is not the same as what you saved',
-    );
-    return value as S?;
-  }
-
-  bool _isPrimitive(value) {
-    if (value is num || value is String || value is DateTime || value is bool) {
-      return true;
-    }
-
-    return false;
-  }
-
-  bool _isSerializable(value) {
-    try {
-      value.toJson();
-    } on NoSuchMethodError {
-      return false;
-    }
-
-    return PersistenceService.deserializers.containsKey(value.runtimeType);
+    return box.get(key);
   }
 
   @override
@@ -106,13 +70,7 @@ class HivePersistenceService implements PersistenceService {
 
     final box = await _box.future;
 
-    if (_isPrimitive(value)) {
-      return box.put(key, value);
-    } else if (_isSerializable(value)) {
-      return box.put(key, value.toJson());
-    } else {
-      throw 'value should either be of primitive type or have a toJson() function';
-    }
+    return box.put(key, value);
   }
 
   @override
