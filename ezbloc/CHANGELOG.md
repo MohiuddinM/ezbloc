@@ -1,3 +1,7 @@
+## 4.1.3
+
+- fix primitive detection
+
 ## 4.1.2
 
 - refactor persistence
