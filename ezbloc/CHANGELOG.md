@@ -1,3 +1,7 @@
+## 4.1.2
+
+- refactor persistence
+
 ## 4.1.1
 
 - minor changes
