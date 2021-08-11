@@ -45,11 +45,11 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
     return false;
   }
 
-  Map? _serialize(value) {
+  Map _serialize(value) {
     try {
       return value.toJson();
     } on NoSuchMethodError {
-      return null;
+      throw '$S should be serializable type';
     }
   }
 
@@ -58,7 +58,7 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
     super.setState(update, event: event);
 
     if (shouldPersist) {
-      final write = _isPrimitive(update) ? update : _serialize(update);
+      final write = _isPrimitive(state) ? state : _serialize(state);
       _persistenceService.set('value', write);
     }
   }
