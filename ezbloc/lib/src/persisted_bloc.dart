@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'bloc_monitor.dart';
 import 'bloc.dart';
 import 'persistence_service.dart';
@@ -7,6 +9,7 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
   late PersistenceService _persistenceService;
   final Object tag;
   final Deserializer<S>? deserializer;
+  final initialization = Completer<void>();
 
   AutoPersistedBloc({
     S? startState,
@@ -34,6 +37,8 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
           super.setState(deserializer!(lastState), event: 'recovered_state');
         }
       }
+
+      initialization.complete();
     });
   }
 
