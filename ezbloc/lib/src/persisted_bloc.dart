@@ -10,7 +10,9 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
   late PersistenceService _persistenceService;
   final Object tag;
   final Deserializer<S>? deserializer;
-  final initialization = Completer<void>();
+  final _initialization = Completer<void>();
+
+  Future<void> get initialization => _initialization.future;
 
   AutoPersistedBloc({
     S? startState,
@@ -40,7 +42,7 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
         }
       }
 
-      initialization.complete();
+      _initialization.complete();
     });
   }
 
