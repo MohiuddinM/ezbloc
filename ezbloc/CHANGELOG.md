@@ -1,3 +1,7 @@
+## 4.1.6
+
+- fix deserialization
+
 ## 4.1.5
 
 - minor changes

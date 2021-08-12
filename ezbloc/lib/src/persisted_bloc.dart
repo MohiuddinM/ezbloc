@@ -37,7 +37,7 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
         } else {
           assert(deserializer != null);
 
-          super.setState(deserializer!(jsonEncode(lastState)),
+          super.setState(deserializer!(jsonDecode(lastState)),
               event: 'recovered_state');
         }
       }
