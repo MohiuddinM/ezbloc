@@ -1,3 +1,7 @@
+## 4.1.4
+
+- add initialization completer
+
 ## 4.1.3
 
 - fix primitive detection
