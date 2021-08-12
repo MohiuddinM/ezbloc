@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'bloc_monitor.dart';
 import 'bloc.dart';
@@ -34,7 +35,8 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
         } else {
           assert(deserializer != null);
 
-          super.setState(deserializer!(lastState), event: 'recovered_state');
+          super.setState(deserializer!(jsonEncode(lastState)),
+              event: 'recovered_state');
         }
       }
 
@@ -42,17 +44,12 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
     });
   }
 
-  bool _isPrimitive(S v) {
-    if (v is num || v is String || v is DateTime || v is bool) {
-      return true;
-    }
+  bool _isPrimitive(S v) =>
+      v is num || v is String || v is DateTime || v is bool;
 
-    return false;
-  }
-
-  Map _serialize(value) {
+  String _serialize(value) {
     try {
-      return value.toJson();
+      return jsonEncode(value.toJson());
     } on NoSuchMethodError {
       throw '$S should be serializable type';
     }
