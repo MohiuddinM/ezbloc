@@ -10,12 +10,14 @@ extension BlocExtensions<S> on Bloc<S> {
     required DataBuilder<S> onState,
     WidgetBuilder? onBusy,
     ErrorBuilder? onError,
+    ShouldSkip<S?>? shouldSkip,
   }) {
     return BlocBuilder<S>(
       key: key,
       onState: onState,
       onError: onError,
       onBusy: onBusy,
+      shouldSkip: shouldSkip,
       bloc: this,
     );
   }

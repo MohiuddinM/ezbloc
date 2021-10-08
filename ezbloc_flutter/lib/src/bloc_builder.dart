@@ -14,6 +14,8 @@ typedef DataBuilder<T> = Widget Function(BuildContext context, T data);
 /// Used when bloc sets an error and an error widget should be built to show that error
 typedef ErrorBuilder = Widget Function(BuildContext context, StateError error);
 
+typedef ShouldSkip<T> = bool Function(T, T);
+
 /// This function takes a [BuildContext], [Bloc], and a [Widget] and returns a widget
 ///
 /// Used when bloc an [ErrorBuilder] is not provided to a [BlocBuilder]
@@ -44,6 +46,8 @@ class BlocBuilder<S> extends StatelessWidget {
 
   /// This is called whenever the bloc sets an error (setError)
   final ErrorBuilder? onError;
+
+  final ShouldSkip<S?>? shouldSkip;
 
   /// This is called when there is an error but no [onError] is defined
   static GlobalErrorBuilder globalOnError = (context, bloc, lastStateBuild) {
@@ -81,12 +85,15 @@ class BlocBuilder<S> extends StatelessWidget {
     );
   };
 
+  static final _defaultShouldSkip = (_, __) => false;
+
   const BlocBuilder({
     Key? key,
     required this.bloc,
     required this.onState,
     this.onBusy,
     this.onError,
+    this.shouldSkip,
   }) : super(key: key);
 
   @override
@@ -96,7 +103,7 @@ class BlocBuilder<S> extends StatelessWidget {
     final onError = this.onError;
 
     return StreamBuilder<S?>(
-      stream: bloc.stream,
+      stream: bloc.stream.distinct(shouldSkip ?? _defaultShouldSkip),
       builder: (context, s) {
         if (bloc.isBusy || s.connectionState == ConnectionState.waiting) {
           if (onBusy != null) {
