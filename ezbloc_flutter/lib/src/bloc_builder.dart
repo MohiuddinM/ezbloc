@@ -14,7 +14,10 @@ typedef DataBuilder<T> = Widget Function(BuildContext context, T data);
 /// Used when bloc sets an error and an error widget should be built to show that error
 typedef ErrorBuilder = Widget Function(BuildContext context, StateError error);
 
-typedef ShouldSkip<T> = bool Function(T, T);
+/// This function takes [pastState] and [currentState]
+///
+/// Return true if the build should be skipped, otherwise false
+typedef ShouldSkip<T> = bool Function(T pastState, T currentState);
 
 /// This function takes a [BuildContext], [Bloc], and a [Widget] and returns a widget
 ///
@@ -47,6 +50,10 @@ class BlocBuilder<S> extends StatelessWidget {
   /// This is called whenever the bloc sets an error (setError)
   final ErrorBuilder? onError;
 
+  /// This is called on every event can be used to skip rebuild on an event
+  ///
+  /// Widget is rebuild if this returns false
+  /// Rebuild is skipped if this returns true
   final ShouldSkip<S?>? shouldSkip;
 
   /// This is called when there is an error but no [onError] is defined
