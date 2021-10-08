@@ -1,3 +1,7 @@
+## 0.7.0
+
+- add function to skip rebuilds
+
 ## 0.6.4
 
 - update ezbloc
