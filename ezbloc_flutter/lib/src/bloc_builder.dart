@@ -110,7 +110,9 @@ class BlocBuilder<S> extends StatelessWidget {
     final onError = this.onError;
 
     return StreamBuilder<S?>(
-      stream: bloc.stream.distinct(shouldSkip ?? _defaultShouldSkip),
+      stream: bloc.stream
+          .distinct(shouldSkip ?? _defaultShouldSkip)
+          .asBroadcastStream(),
       builder: (context, s) {
         if (bloc.isBusy || s.connectionState == ConnectionState.waiting) {
           if (onBusy != null) {
