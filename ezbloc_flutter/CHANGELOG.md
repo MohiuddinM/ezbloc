@@ -1,3 +1,7 @@
+## 0.7.1
+
+- convert stream to broadcast in bloc builder
+
 ## 0.7.0
 
 - add function to skip rebuilds
