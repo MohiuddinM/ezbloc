@@ -38,7 +38,7 @@ abstract class Bloc<S> {
 
   final BlocMonitor _monitor;
 
-  StateError? _error;
+  Error? _error;
   bool _isBusy = true;
   BehaviorSubject<S?>? _stream;
   S? _state;
@@ -97,7 +97,7 @@ abstract class Bloc<S> {
 
   bool get hasError => _error != null;
 
-  StateError get error => _error!;
+  Error get error => _error!;
 
   /// Callback functions that will be called on bloc updated
   final _eventListeners = <BlocListener>[];
@@ -168,17 +168,13 @@ abstract class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setError]
   @protected
   void setError(error, {String? event}) {
-    final e = error is StateError ? error : StateError(error.toString());
-
-    if (_error == e) return;
-
     if (callerAsEventName) {
       event ??= _caller;
     }
 
-    _monitor.onError(this, e, event: event);
+    _monitor.onError(this, error, event: event);
     _isBusy = false;
-    _error = e;
+    _error = error;
     _stream?.add(null);
     _notifyListeners(BlocEventType.error);
   }
