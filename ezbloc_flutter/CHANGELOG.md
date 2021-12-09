@@ -1,3 +1,7 @@
+## 0.8.0
+
+- update dependencies
+
 ## 0.7.1
 
 - convert stream to broadcast in bloc builder
