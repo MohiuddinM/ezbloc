@@ -167,7 +167,9 @@ abstract class Bloc<S> {
   /// [isBusy] is cleared whenever an [error] is set
   /// Optional argument [event] is the name of event which is calling [setError]
   @protected
-  void setError(error, {String? event}) {
+  void setError(dynamic error, {String? event}) {
+    error = error is Error ? error : StateError(error.toString());
+
     if (callerAsEventName) {
       event ??= _caller;
     }
