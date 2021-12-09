@@ -12,7 +12,7 @@ typedef DataBuilder<T> = Widget Function(BuildContext context, T data);
 /// This function takes a [context] and an [error] and returns a widget
 ///
 /// Used when bloc sets an error and an error widget should be built to show that error
-typedef ErrorBuilder = Widget Function(BuildContext context, StateError error);
+typedef ErrorBuilder = Widget Function(BuildContext context, Error error);
 
 /// This function takes [pastState] and [currentState]
 ///
@@ -67,7 +67,7 @@ class BlocBuilder<S> extends StatelessWidget {
     return Container(
       color: Colors.red,
       child: Center(
-        child: Text(error.message),
+        child: Text(error.toString()),
       ),
     );
   };
