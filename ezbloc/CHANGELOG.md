@@ -1,3 +1,7 @@
+## 4.2.0
+
+- change error type to Error
+
 ## 4.1.6
 
 - fix deserialization
