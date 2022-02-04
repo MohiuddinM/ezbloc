@@ -1,3 +1,7 @@
+## 4.3.0
+
+- update dependencies
+
 ## 4.2.0
 
 - change error type to Error
