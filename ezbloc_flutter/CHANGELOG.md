@@ -1,3 +1,7 @@
+## 0.9.1
+
+- fix flutter imports
+
 ## 0.9.0
 
 - add new listen method for widget listeners
