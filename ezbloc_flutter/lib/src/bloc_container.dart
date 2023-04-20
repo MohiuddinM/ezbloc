@@ -1,7 +1,8 @@
-import 'package:ezbloc/ezbloc.dart';
 import 'package:ezbloc_flutter/src/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+
+import 'bloc.dart';
 
 /// Takes [context] and [arg], returns a [Bloc]
 ///
