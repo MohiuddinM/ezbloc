@@ -14,6 +14,8 @@ class _WidgetListener {
 /// Extending [s.Bloc] here, because this one has a dependency on
 /// the flutter sdk
 abstract class Bloc<T> extends s.Bloc<T> {
+  Bloc({super.initialState, super.monitor});
+
   final _listeners = <_WidgetListener>[];
 
   /// Notifies listeners of any events taking place inside this bloc. A widget
