@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
               Text('You have pushed the button this many times:'),
               bloc.builder(
                 onState: (context, data) => Text(data.toString(),
-                    style: Theme.of(context).textTheme.headline4),
+                    style: Theme.of(context).textTheme.headlineMedium),
                 onBusy: (_) => Text('Working'),
                 onError: (_, e) => Text('Error Occurred'),
               ),
