@@ -1,3 +1,8 @@
+## 0.9.2
+
+- update sdk version
+- update flutter bloc constructor
+
 ## 0.9.1
 
 - fix flutter imports
