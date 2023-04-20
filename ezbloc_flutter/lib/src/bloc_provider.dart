@@ -1,5 +1,6 @@
-import 'package:ezbloc/ezbloc.dart';
 import 'package:flutter/widgets.dart';
+
+import 'bloc.dart';
 
 class BlocProvider<T extends Bloc> extends StatefulWidget {
   final T bloc;

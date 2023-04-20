@@ -1,6 +1,6 @@
-import 'package:ezbloc/ezbloc.dart';
 import 'package:flutter/widgets.dart';
 
+import 'bloc.dart';
 import 'bloc_builder.dart';
 import 'bloc_provider.dart';
 import 'bloc_extensions.dart';

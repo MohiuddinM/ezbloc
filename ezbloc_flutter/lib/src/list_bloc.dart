@@ -1,6 +1,8 @@
-import 'package:ezbloc/ezbloc.dart';
+import 'package:ezbloc/ezbloc.dart' hide Bloc;
 import 'package:flutter/widgets.dart';
 import 'package:synchronized/synchronized.dart';
+
+import 'bloc.dart';
 
 abstract class ListBloc<R, S> extends Bloc<ListOp<S>> {
   final ScrollController controller = ScrollController();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ezbloc/ezbloc.dart';
 
+import 'bloc.dart';
 import 'bloc_builder.dart';
 
 extension BlocExtensions<S> on Bloc<S> {

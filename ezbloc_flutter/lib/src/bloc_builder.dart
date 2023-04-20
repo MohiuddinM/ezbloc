@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:ezbloc/ezbloc.dart';
 import 'package:flutter/material.dart';
+
+import 'bloc.dart';
 
 /// This function takes a [context] and [data] of type [T] and returns a widget
 ///
