@@ -1,19 +1,9 @@
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'bloc_event_type.dart';
+import 'bloc_listener_callback.dart';
 import 'bloc_monitor.dart';
-
-enum BlocEventType {
-  init,
-  event,
-  error,
-  stateChange,
-  busy,
-  newDependent,
-  streamClosed,
-}
-
-typedef BlocListener = void Function(BlocEventType type);
 
 /// The central class behind this library
 ///
