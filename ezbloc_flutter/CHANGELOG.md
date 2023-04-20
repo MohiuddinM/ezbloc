@@ -1,3 +1,7 @@
+## 0.9.0
+
+- add new listen method for widget listeners
+
 ## 0.8.0
 
 - update dependencies
