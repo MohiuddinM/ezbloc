@@ -1,3 +1,7 @@
+## 4.3.2
+
+- make notifyListener method protected
+
 ## 4.3.1
 
 - minor refactoring
