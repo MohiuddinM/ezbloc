@@ -1,3 +1,7 @@
+## 4.3.1
+
+- minor refactoring
+
 ## 4.3.0
 
 - update dependencies
