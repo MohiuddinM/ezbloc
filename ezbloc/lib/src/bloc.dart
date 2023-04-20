@@ -37,7 +37,7 @@ abstract class Bloc<S> {
   Bloc({S? initialState, BlocMonitor monitor = const BlocEventsPrinter()})
       : _state = initialState,
         _monitor = monitor {
-    _notifyListeners(BlocEventType.init);
+    notifyListeners(BlocEventType.init);
     _monitor.onInit(this, _state);
     if (_state != null) {
       _isBusy = false;
@@ -58,7 +58,7 @@ abstract class Bloc<S> {
 
       _stream!.onCancel = () {
         if (_stream != null && !_stream!.hasListener) {
-          _notifyListeners(BlocEventType.streamClosed);
+          notifyListeners(BlocEventType.streamClosed);
           _monitor.onStreamDispose(this);
           _stream!.close();
           _stream = null;
@@ -66,7 +66,7 @@ abstract class Bloc<S> {
       };
     }
 
-    _notifyListeners(BlocEventType.newDependent);
+    notifyListeners(BlocEventType.newDependent);
 
     return _stream!.stream;
   }
@@ -105,7 +105,9 @@ abstract class Bloc<S> {
   }
 
   /// Calls all callbacks currently active
-  void _notifyListeners(BlocEventType type) {
+  @protected
+  @mustCallSuper
+  void notifyListeners(BlocEventType type) {
     _eventListeners.forEach((e) => e(type));
   }
 
@@ -134,7 +136,7 @@ abstract class Bloc<S> {
     }
 
     final _stream = this._stream;
-    _notifyListeners(BlocEventType.event);
+    notifyListeners(BlocEventType.event);
     _monitor.onEvent(this, _state, update, event: event);
     final next = nextState(_state, update);
     _isBusy = false;
@@ -147,7 +149,7 @@ abstract class Bloc<S> {
     _state = next;
     if (_stream != null) {
       _stream.add(_state);
-      _notifyListeners(BlocEventType.stateChange);
+      notifyListeners(BlocEventType.stateChange);
       _monitor.onBroadcast(this, _state, event: event);
     }
   }
@@ -168,7 +170,7 @@ abstract class Bloc<S> {
     _isBusy = false;
     _error = error;
     _stream?.add(null);
-    _notifyListeners(BlocEventType.error);
+    notifyListeners(BlocEventType.error);
   }
 
   /// Called by blocs (subclasses) when the updated state isn't available immediately
@@ -187,7 +189,7 @@ abstract class Bloc<S> {
     _isBusy = true;
     _error = null;
     _stream?.add(null);
-    _notifyListeners(BlocEventType.busy);
+    notifyListeners(BlocEventType.busy);
   }
 
   /// Broadcasts the same [state]
@@ -205,7 +207,7 @@ abstract class Bloc<S> {
   @visibleForTesting
   Future<void> close() async {
     if (_stream != null) {
-      _notifyListeners(BlocEventType.streamClosed);
+      notifyListeners(BlocEventType.streamClosed);
       _monitor.onStreamDispose(this);
       await _stream!.close();
       _stream = null;
