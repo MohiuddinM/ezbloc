@@ -114,7 +114,7 @@ class BlocBuilder<S> extends StatelessWidget {
           .distinct(shouldSkip ?? _defaultShouldSkip)
           .asBroadcastStream(),
       builder: (context, s) {
-        if (bloc.isBusy || s.connectionState == ConnectionState.waiting) {
+        if (bloc.isBusy) {
           if (onBusy != null) {
             return onBusy(context);
           } else {
@@ -138,8 +138,7 @@ class BlocBuilder<S> extends StatelessWidget {
           }
         }
 
-        if (s.connectionState == ConnectionState.active ||
-            s.connectionState == ConnectionState.done) {
+        if (bloc.hasState && s.data != null) {
           return onState(context, s.data!);
         }
 
