@@ -1,3 +1,7 @@
+## 0.9.3
+
+- speed up UI rebuilding
+
 ## 0.9.2
 
 - update sdk version
