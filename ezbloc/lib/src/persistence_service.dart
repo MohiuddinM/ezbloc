@@ -4,7 +4,8 @@ import 'dart:typed_data';
 import 'package:hive/hive.dart';
 
 typedef PersistenceServiceBuilder = PersistenceService Function(String name);
-typedef Deserializer<T> = T Function(dynamic json);
+typedef Deserializer<T> = T Function(dynamic o);
+typedef Serializer<T> = dynamic Function(T o);
 
 abstract class PersistenceService {
   static PersistenceServiceBuilder _builder =

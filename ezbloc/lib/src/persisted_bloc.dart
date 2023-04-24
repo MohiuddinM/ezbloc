@@ -7,9 +7,10 @@ import 'persistence_service.dart';
 
 /// If bloc is not a singleton then tags must be provided to differentiate between different instances, otherwise different instances will overwrite each other
 abstract class AutoPersistedBloc<S> extends Bloc<S> {
-  late PersistenceService _persistenceService;
+  late final PersistenceService _persistenceService;
   final Object tag;
   final Deserializer<S>? deserializer;
+  final Serializer<S>? serializer;
   final _initialization = Completer<void>();
 
   Future<void> get initialization => _initialization.future;
@@ -19,6 +20,7 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
     BlocMonitor monitor = const BlocEventsPrinter(),
     this.tag = 0,
     this.deserializer,
+    this.serializer,
   }) : super(
           initialState: null,
           monitor: monitor,
@@ -49,12 +51,18 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
   bool _isPrimitive(S v) =>
       v is num || v is String || v is DateTime || v is bool;
 
-  String _serialize(value) {
-    try {
-      return jsonEncode(value.toJson());
-    } on NoSuchMethodError {
-      throw '$S should be serializable type';
+  /// [serializer] must be provided if [state] is not of a primitive type
+  dynamic _serialize(S value) {
+    if (serializer == null) {
+      throw ArgumentError.notNull('serializer');
     }
+
+    final s = serializer!(value);
+    if (s is num || s is String || s is DateTime || s is bool) {
+      return s;
+    }
+
+    throw UnsupportedError('${s.runtimeType} is not writable');
   }
 
   @override
