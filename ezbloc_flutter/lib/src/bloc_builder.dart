@@ -94,6 +94,26 @@ class BlocBuilder<S> extends StatelessWidget {
 
   static final _defaultShouldSkip = (_, __) => false;
 
+  /// Widget that the builder returns when the bloc is busy
+  Widget _buildBusy(BuildContext context) {
+    return onBusy?.call(context) ??
+        globalOnBusy(
+          context,
+          bloc,
+          bloc.hasState ? onState(context, bloc.state) : null,
+        );
+  }
+
+  /// Widget that the builder return when the bloc has an error
+  Widget _buildError(BuildContext context) {
+    return onError?.call(context, bloc.error) ??
+        globalOnError(
+          context,
+          bloc,
+          bloc.hasState ? onState(context, bloc.state) : null,
+        );
+  }
+
   const BlocBuilder({
     Key? key,
     required this.bloc,
@@ -105,41 +125,27 @@ class BlocBuilder<S> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onBusy = this.onBusy;
-    final onState = this.onState;
-    final onError = this.onError;
+    final stream = bloc.stream
+        .distinct(shouldSkip ?? _defaultShouldSkip)
+        .asBroadcastStream();
 
     return StreamBuilder<S?>(
-      stream: bloc.stream
-          .distinct(shouldSkip ?? _defaultShouldSkip)
-          .asBroadcastStream(),
+      stream: stream,
       builder: (context, s) {
         if (bloc.isBusy) {
-          if (onBusy != null) {
-            return onBusy(context);
-          } else {
-            return globalOnBusy(
-              context,
-              bloc,
-              bloc.hasState ? onState(context, bloc.state) : null,
-            );
-          }
+          return _buildBusy(context);
         }
 
         if (bloc.hasError) {
-          if (onError != null) {
-            return onError(context, bloc.error);
-          } else {
-            return globalOnError(
-              context,
-              bloc,
-              bloc.hasState ? onState(context, bloc.state) : null,
-            );
-          }
+          return _buildError(context);
         }
 
         if (bloc.hasState && s.data != null) {
           return onState(context, s.data!);
+        }
+
+        if (s.connectionState == ConnectionState.waiting) {
+          return _buildBusy(context);
         }
 
         throw StateError('${s.connectionState}, ${s.data}, ${s.error}');
