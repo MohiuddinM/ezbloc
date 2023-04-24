@@ -1,3 +1,7 @@
+## 0.9.4
+
+- additional check in bloc builder
+
 ## 0.9.3
 
 - speed up UI rebuilding
