@@ -51,24 +51,37 @@ abstract class Bloc<S> {
   /// are no listeners.
   Stream<S?> get stream {
     _monitor.onStreamListener(this);
-    if (_stream == null) {
-      _stream = _state == null
-          ? BehaviorSubject<S?>()
-          : BehaviorSubject<S?>.seeded(state);
 
-      _stream!.onCancel = () {
-        if (_stream != null && !_stream!.hasListener) {
-          notifyListeners(BlocEventType.streamClosed);
-          _monitor.onStreamDispose(this);
-          _stream!.close();
-          _stream = null;
-        }
-      };
+    if (_stream == null) {
+      onActivate();
     }
 
     notifyListeners(BlocEventType.newDependent);
 
     return _stream!.stream;
+  }
+
+  /// Called when [Bloc] get the first listener and [stream] is created
+  @mustCallSuper
+  void onActivate() {
+    _stream = _state == null
+        ? BehaviorSubject<S?>()
+        : BehaviorSubject<S?>.seeded(_state);
+
+    _stream!.onCancel = () {
+      if (_stream != null && !_stream!.hasListener) {
+        onDeactivate();
+      }
+    };
+  }
+
+  /// Called when [Bloc] has no more listeners and [stream] is being closed
+  @mustCallSuper
+  void onDeactivate() {
+    notifyListeners(BlocEventType.streamClosed);
+    _monitor.onStreamDispose(this);
+    _stream!.close();
+    _stream = null;
   }
 
   bool get hasState => _state != null;
