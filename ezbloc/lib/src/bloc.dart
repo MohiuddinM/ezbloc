@@ -56,8 +56,6 @@ abstract class Bloc<S> {
       onActivate();
     }
 
-    notifyListeners(BlocEventType.newDependent);
-
     return _stream!.stream;
   }
 
@@ -149,7 +147,6 @@ abstract class Bloc<S> {
     }
 
     final _stream = this._stream;
-    notifyListeners(BlocEventType.event);
     _monitor.onEvent(this, _state, update, event: event);
     final next = nextState(_state, update);
     _isBusy = false;
