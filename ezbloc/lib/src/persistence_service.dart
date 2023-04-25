@@ -8,17 +8,6 @@ typedef Deserializer<T> = T Function(dynamic o);
 typedef Serializer<T> = dynamic Function(T o);
 
 abstract class PersistenceService {
-  static PersistenceServiceBuilder _builder =
-      (name) => HivePersistenceService(name);
-
-  static void use(PersistenceServiceBuilder builder) {
-    _builder = builder;
-  }
-
-  factory PersistenceService(String name) {
-    return _builder(name);
-  }
-
   Future<void> set(String key, value);
 
   Future get(String key);
@@ -29,26 +18,26 @@ abstract class PersistenceService {
 }
 
 class HivePersistenceService implements PersistenceService {
-  static late String databaseDirectory;
-  static bool runningInTest = false;
+  final String databaseDirectory;
+  final bool inMemory;
   final _box = Completer<Box>();
 
-  HivePersistenceService(name) {
-    _initialize(name, databaseDirectory);
+  HivePersistenceService(
+    name, {
+    this.databaseDirectory = '.',
+    this.inMemory = false,
+  }) {
+    _initialize(name);
   }
 
-  void _initialize(name, String directory) async {
+  void _initialize(name) async {
     if (_box.isCompleted) return;
-    try {
-      Hive.init(directory);
-    } on HiveError catch (e) {
-      if (!e.message.contains('already')) {
-        rethrow;
-      }
-    }
+
+    Hive.init(databaseDirectory);
+
     final box = await Hive.openBox(
       name,
-      bytes: runningInTest ? Uint8List(0) : null,
+      bytes: inMemory ? Uint8List(0) : null,
     );
     _box.complete(box);
   }
@@ -78,5 +67,29 @@ class HivePersistenceService implements PersistenceService {
   Future<void> clear() async {
     final box = await _box.future;
     await box.clear();
+  }
+}
+
+class InMemoryPersistenceService implements PersistenceService {
+  final values = <String, dynamic>{};
+
+  @override
+  Future<void> clear() async {
+    values.clear();
+  }
+
+  @override
+  Future get(String key) async {
+    return values.containsKey(key) ? values[key] : null;
+  }
+
+  @override
+  void remove(String key) {
+    values.remove(key);
+  }
+
+  @override
+  Future<void> set(String key, value) async {
+    values.addAll({key: value});
   }
 }
