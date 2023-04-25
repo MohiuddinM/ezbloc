@@ -12,13 +12,10 @@ import 'bloc_monitor.dart';
 /// [R] is the type which subclasses [Bloc]
 /// [S] is the type of [value] which this bloc broadcasts. [S] must implement equality
 abstract class Bloc<S> {
-  static const bool _kReleaseMode =
-      bool.fromEnvironment('dart.vm.product', defaultValue: false);
-
-  /// This library requires the state type to either be a primitive or override == operator.
-  /// Set this to false if you manually override ==.
-  @Deprecated('has no use, will be removed in future')
-  static bool checkIfValueType = false;
+  static const bool _kReleaseMode = bool.fromEnvironment(
+    'dart.vm.product',
+    defaultValue: false,
+  );
 
   /// If set to true, the calling function's name will be used as event name,
   /// if event name is not already set.
