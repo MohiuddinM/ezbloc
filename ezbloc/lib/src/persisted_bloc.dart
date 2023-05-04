@@ -26,6 +26,9 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
           initialState: null,
           monitor: monitor,
         ) {
+    assert(_stateIsPrimitive || deserializer != null);
+    assert(_stateIsPrimitive || serializer != null);
+
     _persistenceService.get(persistenceKey).then((lastState) {
       if (lastState == null) {
         if (startState != null) {
@@ -44,6 +47,10 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
 
       _initialization.complete();
     });
+  }
+
+  bool get _stateIsPrimitive {
+    return S == int || S == double || S == String || S == DateTime || S == bool;
   }
 
   bool _isPrimitive(S v) =>
