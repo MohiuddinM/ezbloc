@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:hive/hive.dart';
 
-typedef PersistenceServiceBuilder = PersistenceService Function(String name);
 typedef Deserializer<T> = T Function(dynamic o);
 typedef Serializer<T> = dynamic Function(T o);
 
@@ -17,7 +16,7 @@ abstract class PersistenceService {
   void remove(String key);
 }
 
-class HivePersistenceService implements PersistenceService {
+final class HivePersistenceService implements PersistenceService {
   final String databaseDirectory;
   final bool inMemory;
   final _box = Completer<Box>();
@@ -70,8 +69,10 @@ class HivePersistenceService implements PersistenceService {
   }
 }
 
-class InMemoryPersistenceService implements PersistenceService {
-  final values = <String, dynamic>{};
+final class InMemoryPersistenceService implements PersistenceService {
+  const InMemoryPersistenceService({this.values = const {}});
+
+  final Map<String, dynamic> values;
 
   @override
   Future<void> clear() async {
