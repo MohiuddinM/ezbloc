@@ -1,3 +1,9 @@
+## 0.10.0
+
+- use Dart 3
+- remove list bloc
+- add bloc resolver
+
 ## 0.9.4
 
 - additional check in bloc builder
