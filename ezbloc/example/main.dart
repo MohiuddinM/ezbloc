@@ -7,7 +7,7 @@ class BroadcastPrinter extends BlocMonitor {
   }
 }
 
-class CounterBloc extends Bloc<int> {
+final class CounterBloc extends Bloc<int> {
   CounterBloc() : super(initialState: 0, monitor: BroadcastPrinter());
 
   // event names are optional and only used for debugging purpose

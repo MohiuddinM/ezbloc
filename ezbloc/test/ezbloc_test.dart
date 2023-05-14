@@ -10,7 +10,7 @@ class BroadcastPrinter extends BlocMonitor {
   }
 }
 
-class CounterBloc extends Bloc<int> {
+final class CounterBloc extends Bloc<int> {
   CounterBloc([int? initialState]) : super(initialState: initialState);
 
   void increment() => setState(state + 1);
@@ -18,7 +18,7 @@ class CounterBloc extends Bloc<int> {
   void decrement() => setState(state - 1);
 }
 
-class IncrementOnlyCounterBloc extends Bloc<int> {
+final class IncrementOnlyCounterBloc extends Bloc<int> {
   IncrementOnlyCounterBloc([int? initialState])
       : super(initialState: initialState);
 

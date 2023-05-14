@@ -32,7 +32,7 @@ class Int {
   String toString() => value.toString();
 }
 
-class IntBloc extends AutoPersistedBloc<Int> {
+final class IntBloc extends AutoPersistedBloc<Int> {
   IntBloc(
     super._persistenceService, {
     required super.tag,
@@ -51,7 +51,7 @@ class IntBloc extends AutoPersistedBloc<Int> {
   String toString() => persistenceKey;
 }
 
-class IntBloc2 extends AutoPersistedBloc<Int> {
+final class IntBloc2 extends AutoPersistedBloc<Int> {
   IntBloc2({super.deserializer, super.serializer})
       : super(
           InMemoryPersistenceService(),
@@ -60,7 +60,7 @@ class IntBloc2 extends AutoPersistedBloc<Int> {
         );
 }
 
-class IntBloc3 extends AutoPersistedBloc<int> {
+final class IntBloc3 extends AutoPersistedBloc<int> {
   IntBloc3({super.deserializer, super.serializer})
       : super(
           InMemoryPersistenceService(),
@@ -69,7 +69,7 @@ class IntBloc3 extends AutoPersistedBloc<int> {
         );
 }
 
-class PrimitiveBloc extends AutoPersistedBloc<int> {
+final class PrimitiveBloc extends AutoPersistedBloc<int> {
   PrimitiveBloc(
     super._persistenceService, {
     required super.tag,

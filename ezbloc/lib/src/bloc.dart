@@ -11,7 +11,7 @@ import 'bloc_monitor.dart';
 /// changes made to the state.
 /// [R] is the type which subclasses [Bloc]
 /// [S] is the type of [value] which this bloc broadcasts. [S] must implement equality
-abstract class Bloc<S> {
+base class Bloc<S> {
   static const bool _kReleaseMode = bool.fromEnvironment(
     'dart.vm.product',
     defaultValue: false,

@@ -5,7 +5,7 @@ import 'bloc.dart';
 import 'persistence_service.dart';
 
 /// If bloc is not a singleton then tags must be provided to differentiate between different instances, otherwise different instances will overwrite each other
-abstract class AutoPersistedBloc<S> extends Bloc<S> {
+base class AutoPersistedBloc<S> extends Bloc<S> {
   final PersistenceService _persistenceService;
   final Object tag;
   final Deserializer<S>? deserializer;
