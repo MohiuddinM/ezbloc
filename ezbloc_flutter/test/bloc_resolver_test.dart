@@ -1,11 +1,11 @@
 import 'package:ezbloc_flutter/ezbloc_flutter.dart';
 import 'package:test/test.dart';
 
-class IntBloc extends Bloc<int> {
+final class IntBloc extends Bloc<int> {
   IntBloc(int value) : super(initialState: value);
 }
 
-class IntBloc2 extends Bloc<int> {
+final class IntBloc2 extends Bloc<int> {
   IntBloc2(int value) : super(initialState: value);
 }
 

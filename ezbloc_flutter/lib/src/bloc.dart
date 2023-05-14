@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 /// Extending [s.Bloc] here, because this one has a dependency on
 /// the flutter sdk
-abstract class Bloc<T> extends s.Bloc<T> {
+base class Bloc<T> extends s.Bloc<T> {
   Bloc({super.initialState, super.monitor});
 
   final _listeners = <({BuildContext context, s.BlocListener callback})>[];

@@ -1,13 +1,13 @@
 import 'package:ezbloc_flutter/ezbloc_flutter.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class CounterBloc extends Bloc<int> {
+final class CounterBloc extends Bloc<int> {
   void increment() => setState(state + 1);
 
   void decrement() => setState(state - 1);
 }
 
-class CounterBloc2 extends Bloc<int> {
+final class CounterBloc2 extends Bloc<int> {
   void increment() => setState(state + 1);
 
   void decrement() => setState(state - 1);
