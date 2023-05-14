@@ -165,11 +165,11 @@ void main() {
     expect(bloc1.state, Int(9));
   });
 
-  test('setState persists state only if shouldPersist is true', () async {
+  test('setState does not persists if shouldPersist is false', () async {
     final bloc = IntBloc(testPersistence, tag: 1, startState: Int(0));
     await bloc.initialization;
 
-    bloc.setState(Int(5));
+    bloc.setState(Int(5), shouldPersist: false);
 
     expect(bloc.state, Int(5));
     expect(testPersistence.values, isEmpty);
