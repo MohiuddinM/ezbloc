@@ -1,8 +1,7 @@
 import 'dart:async';
-
-import 'bloc_monitor.dart';
+import 'package:ezbloc/ezbloc.dart' hide Bloc;
 import 'bloc.dart';
-import 'persistence_service.dart';
+
 
 /// If bloc is not a singleton then tags must be provided to differentiate between different instances, otherwise different instances will overwrite each other
 base class AutoPersistedBloc<S> extends Bloc<S> {

@@ -1,7 +1,7 @@
+import 'package:ezbloc_flutter/ezbloc_flutter.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:ezbloc/ezbloc.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'auto_persistence_test.mocks.dart';
 
 class BlocPrinter extends BlocMonitor {
@@ -30,6 +30,9 @@ class Int {
 
   @override
   String toString() => value.toString();
+
+  @override
+  int get hashCode => value.hashCode;
 }
 
 final class IntBloc extends AutoPersistedBloc<Int> {

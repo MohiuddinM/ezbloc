@@ -1,6 +1,6 @@
 name: ezbloc_flutter
 description: Making blocs easy again. A simplified library for the original bloc approach.
-version: 0.10.1
+version: 0.10.2
 homepage: https://github.com/MohiuddinM/ezbloc
 
 environment:
@@ -20,3 +20,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  mockito: ^5.0.0
+  build_runner: ^2.0.0

@@ -1,4 +1,4 @@
-## 0.10.1
+## 0.10.2
 
 - export auto persisted bloc from ezbloc_flutter
 
