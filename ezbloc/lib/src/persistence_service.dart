@@ -6,8 +6,8 @@ import 'package:hive/hive.dart';
 typedef Deserializer<T> = T Function(dynamic o);
 typedef Serializer<T> = dynamic Function(T o);
 
-abstract class PersistenceService {
-  Future<void> set(String key, value);
+abstract class PersistenceService<T> {
+  Future<void> set(String key, T value);
 
   Future get(String key);
 
@@ -16,7 +16,7 @@ abstract class PersistenceService {
   void remove(String key);
 }
 
-final class HivePersistenceService implements PersistenceService {
+final class HivePersistenceService<T> implements PersistenceService<T> {
   final String databaseDirectory;
   final bool inMemory;
   final _box = Completer<Box>();
@@ -54,7 +54,7 @@ final class HivePersistenceService implements PersistenceService {
   }
 
   @override
-  Future<void> set(String key, value) async {
+  Future<void> set(String key, T value) async {
     assert(value != null);
 
     final box = await _box.future;
@@ -69,10 +69,11 @@ final class HivePersistenceService implements PersistenceService {
   }
 }
 
-final class InMemoryPersistenceService implements PersistenceService {
-  const InMemoryPersistenceService({this.values = const {}});
+final class InMemoryPersistenceService<T> implements PersistenceService<T> {
+  InMemoryPersistenceService({Map<String, T>? preload})
+      : values = preload ?? {};
 
-  final Map<String, dynamic> values;
+  late final Map<String, dynamic> values;
 
   @override
   Future<void> clear() async {
@@ -90,7 +91,7 @@ final class InMemoryPersistenceService implements PersistenceService {
   }
 
   @override
-  Future<void> set(String key, value) async {
+  Future<void> set(String key, T value) async {
     values.addAll({key: value});
   }
 }
