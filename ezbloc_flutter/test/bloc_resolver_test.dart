@@ -1,5 +1,5 @@
 import 'package:ezbloc_flutter/ezbloc_flutter.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 final class IntBloc extends Bloc<int> {
   IntBloc(int value) : super(initialState: value);
