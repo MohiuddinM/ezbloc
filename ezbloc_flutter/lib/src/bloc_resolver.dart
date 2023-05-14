@@ -43,7 +43,7 @@ class BlocResolver<T extends Bloc> {
       create(arg: arg, useCache: useCache);
 
   void clearCache() => _cache.removeWhere(
-        (key, value) => key.type == T.runtimeType,
+        (key, value) => key.type == T,
       );
 
   static void clearAllCaches() => _cache.clear();
