@@ -8,14 +8,38 @@ import 'type_and_arg.dart';
 /// [arg] must implement equality
 typedef ArgBlocBuilder<T> = T Function(dynamic arg);
 
+/// Creates and caches bloc instances on the fly
+///
+/// Guarantees compile time safety (no more [Bloc] does not exist)
 class BlocResolver<T extends Bloc> {
   BlocResolver(this.builder);
 
-  static const _log = EzBlocLogger('BlocCreator');
+  static const _log = EzBlocLogger('BlocResolver');
   final ArgBlocBuilder<T> builder;
-  static final _cache = <TypeAndArg, Bloc>{};
 
+  /// Caches of all types are kept in the same static instance, so we can
+  /// support [clearAllCaches]
+  static final _cache = <TypeAndArg, Bloc>{};
+  T? _toInject;
+
+  /// Injects a bloc into this resolver
+  ///
+  /// This [BlocResolver] will always return this injected [bloc]. This can be
+  /// used during testing, to inject mocks.
+  void inject(T bloc) => _toInject = bloc;
+
+  /// Removed the injected bloc, and restores normal bloc creation
+  void removeInjection() => _toInject = null;
+
+  /// Creates a new bloc, or retrieves a cached one
+  ///
+  /// if [useCache] is false then a new bloc is created everytime, otherwise
+  /// returns a cached bloc if it exists
   T create({dynamic arg, bool useCache = true}) {
+    if (_toInject != null) {
+      return _toInject!;
+    }
+
     if (!useCache) {
       return builder(arg);
     }
@@ -39,12 +63,15 @@ class BlocResolver<T extends Bloc> {
     return bloc;
   }
 
+  /// Redirects to [create]
   T call({dynamic arg, bool useCache = true}) =>
       create(arg: arg, useCache: useCache);
 
+  /// Clears cached blocs only of type [T]
   void clearCache() => _cache.removeWhere(
         (key, value) => key.type == T,
       );
 
+  /// Removes all cached blocs of all types
   static void clearAllCaches() => _cache.clear();
 }
