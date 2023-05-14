@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:ezbloc/ezbloc.dart' hide Bloc;
 import 'bloc.dart';
 
-
 /// If bloc is not a singleton then tags must be provided to differentiate between different instances, otherwise different instances will overwrite each other
 base class AutoPersistedBloc<S> extends Bloc<S> {
   final PersistenceService _persistenceService;
@@ -75,7 +74,7 @@ base class AutoPersistedBloc<S> extends Bloc<S> {
   }
 
   @override
-  void setState(S update, {String? event, bool shouldPersist = false}) {
+  void setState(S update, {String? event, bool shouldPersist = true}) {
     super.setState(update, event: event);
 
     if (shouldPersist) {
