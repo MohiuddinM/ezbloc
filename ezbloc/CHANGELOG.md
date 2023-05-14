@@ -1,3 +1,7 @@
+## 5.0.1
+
+- remove auto persisted bloc
+
 ## 5.0.0
 
 - use Dart 3
