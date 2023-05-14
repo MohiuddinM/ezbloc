@@ -10,3 +10,4 @@ export 'src/bloc_test_.dart';
 export 'src/bloc_provider.dart';
 export 'src/context_extensions.dart';
 export 'src/bloc.dart';
+export 'src/bloc_resolver.dart';
