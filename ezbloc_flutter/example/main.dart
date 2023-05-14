@@ -1,21 +1,25 @@
 import 'package:ezbloc_flutter/ezbloc_flutter.dart';
-import 'package:path_provider/path_provider.dart' as paths;
 import 'package:flutter/material.dart';
 
-class CounterBloc extends AutoPersistedBloc<int> {
+final class CounterBloc extends AutoPersistedBloc<int> {
   final int counterNumber;
 
-  CounterBloc({this.counterNumber = 0}) : super(initialState: 0);
+  CounterBloc({this.counterNumber = 0})
+      : super(InMemoryPersistenceService(), startState: 0);
 
   void increment() => setState(state + 1, event: 'increment');
 
   void decrement() => setState(state - 1, event: 'decrement');
 }
 
+final counterBlocResolver = BlocResolver<CounterBloc, int>(
+  (arg) => CounterBloc(counterNumber: arg ?? 0),
+);
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocContainer.get<CounterBloc>();
+    final bloc = counterBlocResolver();
 
     return MaterialApp(
       home: Scaffold(
@@ -43,10 +47,5 @@ class MyApp extends StatelessWidget {
 }
 
 void main() async {
-  final documentsDir = (await paths.getApplicationDocumentsDirectory()).path;
-  HivePersistenceService.databaseDirectory = documentsDir;
-  BlocContainer.add<CounterBloc>(
-    (context, arg) => CounterBloc(counterNumber: arg),
-  );
   runApp(MyApp());
 }
