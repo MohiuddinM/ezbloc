@@ -1,3 +1,7 @@
+## 0.11.0
+
+- setState in AutoPersistedBloc defaults to true
+
 ## 0.10.2
 
 - export auto persisted bloc from ezbloc_flutter
