@@ -1,22 +1,13 @@
 import 'package:ezbloc/ezbloc.dart' as s;
+import 'package:ezbloc_flutter/src/context_extensions.dart';
 import 'package:flutter/widgets.dart';
-
-/// Helper class to contain [s.BlocListener] and a [BuildContext]
-class _WidgetListener {
-  final BuildContext context;
-  final s.BlocListener callback;
-
-  const _WidgetListener(this.context, this.callback);
-
-  bool get isDisposed => !context.mounted;
-}
 
 /// Extending [s.Bloc] here, because this one has a dependency on
 /// the flutter sdk
 abstract class Bloc<T> extends s.Bloc<T> {
   Bloc({super.initialState, super.monitor});
 
-  final _listeners = <_WidgetListener>[];
+  final _listeners = <({BuildContext context, s.BlocListener callback})>[];
 
   /// Notifies listeners of any events taking place inside this bloc. A widget
   /// can only call this once.
@@ -28,14 +19,14 @@ abstract class Bloc<T> extends s.Bloc<T> {
   void listen(BuildContext context, s.BlocListener callback) {
     final i = _listeners.indexWhere((e) => e.context == context);
     if (i == -1) {
-      _listeners.add(_WidgetListener(context, callback));
+      _listeners.add((context: context, callback: callback));
     }
   }
 
   @protected
   @mustCallSuper
   void notifyListeners(s.BlocEventType type) {
-    _listeners.removeWhere((e) => e.isDisposed);
+    _listeners.removeWhere((e) => e.context.isDisposed);
 
     for (final listener in _listeners) {
       listener.callback(type);
