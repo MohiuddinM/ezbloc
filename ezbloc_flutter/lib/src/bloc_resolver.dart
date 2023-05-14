@@ -6,16 +6,16 @@ import 'type_and_arg.dart';
 ///
 /// Used by [BlocContainer] to instantiate blocs on demand
 /// [arg] must implement equality
-typedef ArgBlocBuilder<T> = T Function(dynamic arg);
+typedef ArgBlocBuilder<T, R> = T Function(R arg);
 
 /// Creates and caches bloc instances on the fly
 ///
 /// Guarantees compile time safety (no more [Bloc] does not exist)
-class BlocResolver<T extends Bloc> {
+class BlocResolver<T extends Bloc, R> {
   BlocResolver(this.builder);
 
-  static const _log = EzBlocLogger('BlocResolver');
-  final ArgBlocBuilder<T> builder;
+  final _log = EzBlocLogger('BlocResolver<$T, $R>');
+  final ArgBlocBuilder<T, R?> builder;
 
   /// Caches of all types are kept in the same static instance, so we can
   /// support [clearAllCaches]
@@ -35,7 +35,7 @@ class BlocResolver<T extends Bloc> {
   ///
   /// if [useCache] is false then a new bloc is created everytime, otherwise
   /// returns a cached bloc if it exists
-  T create({dynamic arg, bool useCache = true}) {
+  T create({R? arg, bool useCache = true}) {
     if (_toInject != null) {
       return _toInject!;
     }
@@ -64,7 +64,7 @@ class BlocResolver<T extends Bloc> {
   }
 
   /// Redirects to [create]
-  T call({dynamic arg, bool useCache = true}) =>
+  T call({R? arg, bool useCache = true}) =>
       create(arg: arg, useCache: useCache);
 
   /// Clears cached blocs only of type [T]

@@ -10,12 +10,12 @@ class IntBloc2 extends Bloc<int> {
 }
 
 void main() => group('BlocResolver', () {
-      late BlocResolver<IntBloc> intResolver;
-      late BlocResolver<IntBloc2> intResolver2;
+      late BlocResolver<IntBloc, int> intResolver;
+      late BlocResolver<IntBloc2, int> intResolver2;
 
       setUp(() {
-        intResolver = BlocResolver((arg) => IntBloc(arg));
-        intResolver2 = BlocResolver((arg) => IntBloc2(arg));
+        intResolver = BlocResolver((arg) => IntBloc(arg ?? 0));
+        intResolver2 = BlocResolver((arg) => IntBloc2(arg ?? 0));
       });
 
       test('create without cache', () {
