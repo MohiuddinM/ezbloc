@@ -71,4 +71,22 @@ void main() => group('BlocResolver', () {
         expect(identical(a, c), isFalse);
         expect(identical(b, d), isFalse);
       });
+
+      test('always return injected', () {
+        intResolver.inject(IntBloc(3));
+        final a = intResolver.create(arg: 2, useCache: true);
+
+        expect(a.state, 3);
+      });
+
+      test('return normal after remove injected', () {
+        intResolver.inject(IntBloc(3));
+        final a = intResolver.create(arg: 2, useCache: true);
+
+        intResolver.removeInjection();
+        final b = intResolver.create(arg: 2, useCache: true);
+
+        expect(a.state, 3);
+        expect(b.state, 2);
+      });
     });
