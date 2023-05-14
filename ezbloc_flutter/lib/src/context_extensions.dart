@@ -6,6 +6,8 @@ import 'bloc_provider.dart';
 import 'bloc_extensions.dart';
 
 extension ContextX<S> on BuildContext {
+  bool get isDisposed => !mounted;
+
   S? blocValue<R extends Bloc<S>>() {
     final bloc = BlocProvider.of<R>(this);
     return bloc.state;
