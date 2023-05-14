@@ -70,6 +70,11 @@ abstract class AutoPersistedBloc<S> extends Bloc<S> {
     throw UnsupportedError('${s.runtimeType} is not writable');
   }
 
+  /// Removes the [state] persisted in this bloc
+  void removePersistedState() {
+    _persistenceService.remove(persistenceKey);
+  }
+
   @override
   void setState(S update, {String? event, bool shouldPersist = false}) {
     super.setState(update, event: event);
