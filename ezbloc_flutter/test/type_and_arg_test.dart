@@ -1,4 +1,4 @@
-import 'package:ezbloc_flutter/ezbloc_flutter.dart';
+import 'package:ezbloc_flutter/src/type_and_arg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'bloc_container_test.dart';
 

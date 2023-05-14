@@ -1,8 +1,8 @@
 import 'package:ezbloc_flutter/src/logger.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bloc.dart';
+import 'type_and_arg.dart';
 
 /// Takes [context] and [arg], returns a [Bloc]
 ///
@@ -10,43 +10,6 @@ import 'bloc.dart';
 /// [arg] must implement equality
 typedef BlocWithArgBuilder<T> = T Function(BuildContext? context, dynamic arg);
 
-/// Acts as a key for bloc container cache
-///
-/// For cache to return cache value, both type and arg must match with a stored version
-class TypeAndArg {
-  final Type type;
-  final arg;
-
-  TypeAndArg(this.type, this.arg);
-
-  @override
-  bool operator ==(Object other) {
-    if (other is! TypeAndArg) {
-      return false;
-    }
-
-    if (other.type == type && other.arg.runtimeType == arg.runtimeType) {
-      if (other.arg is List) {
-        return listEquals(other.arg, arg);
-      }
-
-      if (other.arg is Set) {
-        return setEquals(other.arg, arg);
-      }
-
-      if (other.arg is Map) {
-        return mapEquals(other.arg, arg);
-      }
-
-      return other.arg == arg;
-    }
-
-    return false;
-  }
-
-  @override
-  int get hashCode => type.hashCode + arg.hashCode;
-}
 
 /// Builds, saves and provides [Bloc] independent of the build tree
 ///
