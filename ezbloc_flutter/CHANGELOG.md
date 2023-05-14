@@ -1,3 +1,7 @@
+## 0.10.1
+
+- export auto persisted bloc from ezbloc_flutter
+
 ## 0.10.0
 
 - use Dart 3
