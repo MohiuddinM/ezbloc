@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ezbloc_flutter/ezbloc_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +8,24 @@ final class CounterBloc extends AutoPersistedBloc<int> {
 
   CounterBloc({this.counterNumber = 0})
       : super(InMemoryPersistenceService(), startState: 0);
+
+  Timer? _timer;
+
+  @override
+  void onActivate() {
+    super.onActivate();
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      increment();
+    });
+  }
+
+  @override
+  void onDeactivate() {
+    super.onDeactivate();
+
+    _timer?.cancel();
+  }
 
   void increment() => setState(state + 1, event: 'increment');
 
@@ -29,8 +49,10 @@ class MyApp extends StatelessWidget {
             children: [
               Text('You have pushed the button this many times:'),
               bloc.builder(
-                onState: (context, data) => Text(data.toString(),
-                    style: Theme.of(context).textTheme.headlineMedium),
+                onState: (context, data) => Text(
+                  data.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
                 onBusy: (_) => Text('Working'),
                 onError: (_, e) => Text('Error Occurred'),
               ),
