@@ -1,3 +1,7 @@
+## 0.12.3
+
+- globalOnBusy works inside scrollable
+
 ## 0.12.2
 
 - define BusyBuilder type
