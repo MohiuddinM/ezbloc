@@ -5,7 +5,7 @@ import 'bloc.dart';
 /// Callbacks which are sent by the blocs, can be used for debugging or side effects
 ///
 /// [T] is the type of state value
-/// [blocName] is the name of bloc, which sent the event
+/// [bloc] is the name of bloc, which sent the event
 abstract class BlocMonitor<R extends Bloc<S>, S> {
   /// Called when the bloc is being initialized
   ///
@@ -28,7 +28,7 @@ abstract class BlocMonitor<R extends Bloc<S>, S> {
   void onBusy(R bloc, {String? event}) {}
 
   /// Called whenever the bloc encounters an error
-  void onError(R bloc, Error error, {String? event}) {}
+  void onError(R bloc, dynamic error, {String? event}) {}
 }
 
 class BlocEventsPrinter<R extends Bloc<S>, S> implements BlocMonitor<R, S> {
@@ -50,7 +50,7 @@ class BlocEventsPrinter<R extends Bloc<S>, S> implements BlocMonitor<R, S> {
   }
 
   @override
-  void onError(R bloc, Error error, {String? event}) {
+  void onError(R bloc, dynamic error, {String? event}) {
     _log.info('Error by ${bloc.runtimeType}:\n'
         '    error: $error\n'
         '    at event: $event');
