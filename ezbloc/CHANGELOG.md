@@ -1,3 +1,7 @@
+## 5.0.3
+
+- change error type
+
 ## 5.0.2
 
 - error type is not dynamic
