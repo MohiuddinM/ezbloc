@@ -1,3 +1,7 @@
+## 5.0.2
+
+- error type is not dynamic
+
 ## 5.0.1
 
 - remove auto persisted bloc
