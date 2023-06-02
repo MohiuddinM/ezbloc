@@ -1,3 +1,8 @@
+## 0.12.0
+
+- Error type is now dynamic
+- onBusy also provides state if valid
+
 ## 0.11.0
 
 - setState in AutoPersistedBloc defaults to true
