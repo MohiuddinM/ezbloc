@@ -9,10 +9,15 @@ import 'bloc.dart';
 /// Used when bloc updates its state and widget needs to rebuild with new data
 typedef DataBuilder<T> = Widget Function(BuildContext context, T data);
 
+/// This function takes a [context] and [data] of type [T] and returns a widget
+///
+/// Used when bloc updates its state and widget needs to rebuild with new data
+typedef BusyBuilder<T> = Widget Function(BuildContext context, T? data);
+
 /// This function takes a [context] and an [error] and returns a widget
 ///
 /// Used when bloc sets an error and an error widget should be built to show that error
-typedef ErrorBuilder = Widget Function(BuildContext context, Error error);
+typedef ErrorBuilder<T> = Widget Function(BuildContext context, T? error);
 
 /// This function takes [pastState] and [currentState]
 ///
@@ -45,7 +50,7 @@ class BlocBuilder<S> extends StatelessWidget {
   final DataBuilder<S> onState;
 
   /// This is called whenever the bloc sets the onBusy flag (setBusy)
-  final WidgetBuilder? onBusy;
+  final BusyBuilder? onBusy;
 
   /// This is called whenever the bloc sets an error (setError)
   final ErrorBuilder? onError;
@@ -96,7 +101,7 @@ class BlocBuilder<S> extends StatelessWidget {
 
   /// Widget that the builder returns when the bloc is busy
   Widget _buildBusy(BuildContext context) {
-    return onBusy?.call(context) ??
+    return onBusy?.call(context, bloc.hasState ? bloc.state : null) ??
         globalOnBusy(
           context,
           bloc,

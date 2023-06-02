@@ -16,7 +16,7 @@ extension ContextX<S> on BuildContext {
   Widget blocBuilder<R extends Bloc<S>>({
     Key? key,
     required DataBuilder<S> onState,
-    WidgetBuilder? onBusy,
+    BusyBuilder? onBusy,
     ErrorBuilder? onError,
   }) {
     final bloc = BlocProvider.of<R>(this);

@@ -8,7 +8,7 @@ extension BlocExtensions<S> on Bloc<S> {
   Widget builder({
     Key? key,
     required DataBuilder<S> onState,
-    WidgetBuilder? onBusy,
+    BusyBuilder? onBusy,
     ErrorBuilder? onError,
     ShouldSkip<S?>? shouldSkip,
   }) {
