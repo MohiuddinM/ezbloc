@@ -1,3 +1,7 @@
+## 0.12.2
+
+- define BusyBuilder type
+
 ## 0.12.1
 
 - add BusyBuilder type
