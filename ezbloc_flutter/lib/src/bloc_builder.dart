@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'bloc.dart';
@@ -78,22 +76,17 @@ class BlocBuilder<S> extends StatelessWidget {
   };
 
   /// This is called when there is an busy state but no [onBusy] is defined
-  static GlobalBusyBuilder globalOnBusy = (_, __, ___) {
-    return LayoutBuilder(
-      builder: (context, crts) {
-        if (crts.maxHeight < 10 || crts.maxWidth < 10) {
-          // Size is too small to draw a CircularProgressIndicator
-          return const SizedBox();
-        }
+  static GlobalBusyBuilder globalOnBusy = (_, __, lastStateBuild) {
+    if (lastStateBuild != null) {
+      return lastStateBuild;
+    }
 
-        return Center(
-          child: SizedBox(
-            width: min(60, crts.maxWidth),
-            height: min(60, crts.maxHeight),
-            child: CircularProgressIndicator.adaptive(),
-          ),
-        );
-      },
+    return Center(
+      child: SizedBox(
+        width: 40,
+        height: 40,
+        child: CircularProgressIndicator.adaptive(),
+      ),
     );
   };
 
