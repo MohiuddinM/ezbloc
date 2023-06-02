@@ -50,7 +50,7 @@ class BlocBuilder<S> extends StatelessWidget {
   final DataBuilder<S> onState;
 
   /// This is called whenever the bloc sets the onBusy flag (setBusy)
-  final BusyBuilder? onBusy;
+  final BusyBuilder<S>? onBusy;
 
   /// This is called whenever the bloc sets an error (setError)
   final ErrorBuilder? onError;
