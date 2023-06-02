@@ -25,7 +25,7 @@ base class Bloc<S> {
 
   final BlocMonitor _monitor;
 
-  Error? _error;
+  dynamic _error;
   bool _isBusy = true;
   BehaviorSubject<S?>? _stream;
   S? _state;
@@ -95,7 +95,7 @@ base class Bloc<S> {
 
   bool get hasError => _error != null;
 
-  Error get error => _error!;
+  dynamic get error => _error!;
 
   /// Callback functions that will be called on bloc updated
   final _eventListeners = <BlocListener>[];
@@ -167,8 +167,6 @@ base class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setError]
   @protected
   void setError(dynamic error, {String? event}) {
-    error = error is Error ? error : StateError(error.toString());
-
     if (callerAsEventName) {
       event ??= _caller;
     }
