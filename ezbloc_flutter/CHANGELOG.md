@@ -1,3 +1,7 @@
+## 0.12.1
+
+- add BusyBuilder type
+
 ## 0.12.0
 
 - Error type is now dynamic
