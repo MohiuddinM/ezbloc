@@ -1,3 +1,7 @@
+## 5.0.4
+
+- make bloc abstract class
+
 ## 5.0.3
 
 - change error type

@@ -11,17 +11,11 @@ import 'bloc_monitor.dart';
 /// changes made to the state.
 /// [R] is the type which subclasses [Bloc]
 /// [S] is the type of [value] which this bloc broadcasts. [S] must implement equality
-base class Bloc<S> {
+abstract class Bloc<S> {
   static const bool _kReleaseMode = bool.fromEnvironment(
     'dart.vm.product',
     defaultValue: false,
   );
-
-  /// If set to true, the calling function's name will be used as event name,
-  /// if event name is not already set.
-  /// Library uses StackTrace [_caller] to find name of calling function, and
-  /// this is not always possible.
-  static bool callerAsEventName = !_kReleaseMode;
 
   final BlocMonitor _monitor;
 
@@ -139,7 +133,7 @@ base class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setState]
   @protected
   void setState(S update, {String? event}) {
-    if (callerAsEventName) {
+    if (_kReleaseMode) {
       event ??= _caller;
     }
 
@@ -167,7 +161,7 @@ base class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setError]
   @protected
   void setError(dynamic error, {String? event}) {
-    if (callerAsEventName) {
+    if (_kReleaseMode) {
       event ??= _caller;
     }
 
@@ -186,7 +180,7 @@ base class Bloc<S> {
   @protected
   void setBusy({String? event}) {
     if (_isBusy) return;
-    if (callerAsEventName) {
+    if (_kReleaseMode) {
       event ??= _caller;
     }
 

@@ -33,7 +33,6 @@ final class IncrementOnlyCounterBloc extends Bloc<int> {
 }
 
 void main() {
-  Bloc.callerAsEventName = true;
   group('bloc tests', () {
     test('bloc stream is broadcast', () {
       final bloc = CounterBloc(0);

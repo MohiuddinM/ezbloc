@@ -67,11 +67,13 @@ void testBloc<R extends Bloc<S>, S>(
       stream = stream.distinct();
     }
 
-    unawaited(expectLater(stream, expectedStates).onError(
-      (error, stackTrace) {
-        throw '$trace \n\n $error';
-      },
-    ));
+    unawaited(
+      expectLater(stream, expectedStates).onError(
+        (error, _) {
+          throw '$trace \n\n $error';
+        },
+      ),
+    );
 
     if (expectBefore != null) {
       await expectBefore(_bloc);
@@ -80,6 +82,7 @@ void testBloc<R extends Bloc<S>, S>(
     job ??= (_bloc) async {};
 
     await job!(_bloc);
+
     // ignore: invalid_use_of_visible_for_testing_member
     await _bloc.close();
 
