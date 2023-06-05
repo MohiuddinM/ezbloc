@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 /// Acts as a key for bloc container cache
 ///
 /// For cache to return cache value, both type and arg must match with a stored version
-class TypeAndArg {
+final class TypeAndArg {
   final Type type;
   final arg;
 

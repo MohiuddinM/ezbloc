@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
                   data.toString(),
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
-                onBusy: (_) => Text('Working'),
+                onBusy: (_, __) => Text('Working'),
                 onError: (_, e) => Text('Error Occurred'),
               ),
             ],

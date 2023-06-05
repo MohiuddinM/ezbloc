@@ -11,11 +11,11 @@ typedef ArgBlocBuilder<T, R> = T Function(R arg);
 /// Creates and caches bloc instances on the fly
 ///
 /// Guarantees compile time safety (no more [Bloc] does not exist)
-class BlocResolver<T extends Bloc, R> {
-  BlocResolver(this.builder);
+final class BlocResolver<T extends Bloc, R> {
+  BlocResolver(this._builder);
 
   final _log = EzBlocLogger('BlocResolver<$T, $R>');
-  final ArgBlocBuilder<T, R?> builder;
+  final ArgBlocBuilder<T, R?> _builder;
 
   /// Caches of all types are kept in the same static instance, so we can
   /// support [clearAllCaches]
@@ -41,7 +41,7 @@ class BlocResolver<T extends Bloc, R> {
     }
 
     if (!useCache) {
-      return builder(arg);
+      return _builder(arg);
     }
 
     final cacheKey = TypeAndArg(T, arg);
@@ -50,7 +50,7 @@ class BlocResolver<T extends Bloc, R> {
       return _cache[cacheKey]! as T;
     }
 
-    final bloc = builder(arg);
+    final bloc = _builder(arg);
 
     _cache.addAll({cacheKey: bloc});
 

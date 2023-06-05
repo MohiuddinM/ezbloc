@@ -1,3 +1,7 @@
+## 0.12.4
+
+- fix class modifiers
+
 ## 0.12.3
 
 - globalOnBusy works inside scrollable

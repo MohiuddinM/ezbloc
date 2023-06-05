@@ -1,6 +1,6 @@
 name: ezbloc_flutter
 description: Making blocs easy again. A simplified library for the original bloc approach.
-version: 0.12.3
+version: 0.12.4
 homepage: https://github.com/MohiuddinM/ezbloc
 
 environment:
@@ -10,12 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  ezbloc: ^5.0.3
+  ezbloc: ^5.0.4
   rxdart: '>=0.26.0 <2.0.0'
   hive: ^2.0.0
   path: ^1.8.0
   quick_log: ^5.0.0
-  synchronized: ^3.0.0
 
 dev_dependencies:
   flutter_test:

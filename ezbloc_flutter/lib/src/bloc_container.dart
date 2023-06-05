@@ -15,7 +15,7 @@ typedef BlocWithArgBuilder<T> = T Function(BuildContext? context, dynamic arg);
 ///
 /// Generally, applications would [add] all the blocs which would be required any where in the application.
 /// And then [get] them whenever they are needed
-class BlocContainer {
+final class BlocContainer {
   static const _log = EzBlocLogger('BlocContainer');
   static final Map<Type, BlocWithArgBuilder> _blocs = {};
   static final Map<TypeAndArg, Bloc> _cache = {};
