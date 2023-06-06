@@ -1,3 +1,7 @@
+## 0.12.5
+
+- BlocBuilder does not create broadcast stream
+
 ## 0.12.4
 
 - fix class modifiers
