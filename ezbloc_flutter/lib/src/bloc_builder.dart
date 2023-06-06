@@ -123,9 +123,7 @@ class BlocBuilder<S> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stream = bloc.stream
-        .distinct(shouldSkip ?? _defaultShouldSkip)
-        .asBroadcastStream();
+    final stream = bloc.stream.distinct(shouldSkip ?? _defaultShouldSkip);
 
     return StreamBuilder<S?>(
       stream: stream,
