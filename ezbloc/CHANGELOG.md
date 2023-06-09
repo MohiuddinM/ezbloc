@@ -1,3 +1,7 @@
+## 5.0.5
+
+- fix release mode caller condition
+
 ## 5.0.4
 
 - make bloc abstract class
