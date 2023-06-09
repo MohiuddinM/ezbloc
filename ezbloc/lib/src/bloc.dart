@@ -12,6 +12,15 @@ import 'bloc_monitor.dart';
 /// [R] is the type which subclasses [Bloc]
 /// [S] is the type of [value] which this bloc broadcasts. [S] must implement equality
 abstract class Bloc<S> {
+  /// [initialState] is the state which is set at initialization. if its null, the initial state is set to busy.
+  Bloc({S? initialState, BlocMonitor monitor = const BlocEventsPrinter()})
+      : _state = initialState,
+        _monitor = monitor {
+    notifyListeners(BlocEventType.init);
+    _monitor.onInit(this, _state);
+    _isBusy = _state == null;
+  }
+
   static const bool _kReleaseMode = bool.fromEnvironment(
     'dart.vm.product',
     defaultValue: false,
@@ -23,17 +32,6 @@ abstract class Bloc<S> {
   bool _isBusy = true;
   BehaviorSubject<S?>? _stream;
   S? _state;
-
-  /// [initialState] is the state which is set at initialization. if its null, the initial state is set to busy.
-  Bloc({S? initialState, BlocMonitor monitor = const BlocEventsPrinter()})
-      : _state = initialState,
-        _monitor = monitor {
-    notifyListeners(BlocEventType.init);
-    _monitor.onInit(this, _state);
-    if (_state != null) {
-      _isBusy = false;
-    }
-  }
 
   /// Broadcast Stream to which all builders listen
   ///
@@ -89,7 +87,7 @@ abstract class Bloc<S> {
 
   bool get hasError => _error != null;
 
-  dynamic get error => _error!;
+  dynamic get error => _error;
 
   /// Callback functions that will be called on bloc updated
   final _eventListeners = <BlocListener>[];
@@ -133,7 +131,7 @@ abstract class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setState]
   @protected
   void setState(S update, {String? event}) {
-    if (_kReleaseMode) {
+    if (!_kReleaseMode) {
       event ??= _caller;
     }
 
@@ -161,7 +159,7 @@ abstract class Bloc<S> {
   /// Optional argument [event] is the name of event which is calling [setError]
   @protected
   void setError(dynamic error, {String? event}) {
-    if (_kReleaseMode) {
+    if (!_kReleaseMode) {
       event ??= _caller;
     }
 
@@ -180,7 +178,7 @@ abstract class Bloc<S> {
   @protected
   void setBusy({String? event}) {
     if (_isBusy) return;
-    if (_kReleaseMode) {
+    if (!_kReleaseMode) {
       event ??= _caller;
     }
 
