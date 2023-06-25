@@ -1,3 +1,7 @@
+## 5.0.7
+
+- refactor stream dispose
+
 ## 5.0.6
 
 - add some delay before dispose
