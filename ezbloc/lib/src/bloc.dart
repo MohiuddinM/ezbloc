@@ -57,7 +57,11 @@ abstract class Bloc<S> {
 
     _stream!.onCancel = () {
       if (_stream != null && !_stream!.hasListener) {
-        onDeactivate();
+        Future.delayed(Duration(seconds: 2)).then((_) {
+          if (!_stream!.hasListener) {
+            onDeactivate();
+          }
+        });
       }
     };
   }
