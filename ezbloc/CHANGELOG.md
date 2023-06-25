@@ -1,3 +1,7 @@
+## 5.0.6
+
+- add some delay before dispose
+
 ## 5.0.5
 
 - fix release mode caller condition
