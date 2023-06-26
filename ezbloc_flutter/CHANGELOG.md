@@ -1,3 +1,7 @@
+## 0.12.6
+
+- add BlocResolver.cachedBlocs getter
+
 ## 0.12.5
 
 - BlocBuilder does not create broadcast stream
