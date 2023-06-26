@@ -19,4 +19,5 @@ dependencies:
 dev_dependencies:
   mockito: ^5.0.0
   build_runner: ^2.0.0
+  lints: ^2.1.1
 
