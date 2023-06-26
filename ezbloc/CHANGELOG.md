@@ -1,3 +1,7 @@
+## 5.0.8
+
+- use cancelable timer for stream dispose
+
 ## 5.0.7
 
 - refactor stream dispose
