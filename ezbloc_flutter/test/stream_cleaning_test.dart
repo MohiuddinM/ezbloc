@@ -39,7 +39,6 @@ void main() {
       verifyNever(mockBlocMonitor.onStreamDispose(any));
       verify(mockBlocMonitor.onStreamListener(any)).called(3);
 
-
       key.currentState!.setBuilders(1);
       await tester.pumpAndSettle();
 
@@ -47,6 +46,8 @@ void main() {
 
       key.currentState!.setBuilders(0);
       await tester.pumpAndSettle();
+
+      await tester.pump(Duration(seconds: 5));
 
       verify(mockBlocMonitor.onStreamDispose(any)).called(1);
     },
