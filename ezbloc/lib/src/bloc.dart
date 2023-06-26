@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -32,6 +34,7 @@ abstract class Bloc<S> {
   bool _isBusy = true;
   BehaviorSubject<S?>? _stream;
   S? _state;
+  Timer? _deactivationTimer;
 
   /// Broadcast Stream to which all builders listen
   ///
@@ -48,6 +51,8 @@ abstract class Bloc<S> {
     return _stream!.stream;
   }
 
+  bool get _shouldDeactivate => _stream != null && !_stream!.hasListener;
+
   /// Called when [Bloc] get the first listener and [stream] is created
   @mustCallSuper
   void onActivate() {
@@ -56,11 +61,12 @@ abstract class Bloc<S> {
         : BehaviorSubject<S?>.seeded(_state);
 
     _stream!.onCancel = () {
-      if (_stream != null && !_stream!.hasListener) {
-        Future.delayed(Duration(seconds: 2)).then((_) {
-          if (_stream != null && !_stream!.hasListener) {
+      if (_shouldDeactivate && _deactivationTimer == null) {
+        _deactivationTimer = Timer(const Duration(seconds: 2), () {
+          if (_shouldDeactivate) {
             onDeactivate();
           }
+          _deactivationTimer = null;
         });
       }
     };
@@ -207,11 +213,11 @@ abstract class Bloc<S> {
   /// But is useful for testing, in cases where otherwise the tester keeps waiting until done.
   @visibleForTesting
   Future<void> close() async {
+    _deactivationTimer?.cancel();
+    _deactivationTimer = null;
+
     if (_stream != null) {
-      notifyListeners(BlocEventType.streamClosed);
-      _monitor.onStreamDispose(this);
-      await _stream!.close();
-      _stream = null;
+      onDeactivate();
     }
   }
 
