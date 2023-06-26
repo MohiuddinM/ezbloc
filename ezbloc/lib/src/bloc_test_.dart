@@ -56,11 +56,11 @@ void testBloc<R extends Bloc<S>, S>(
       await setup();
     }
 
-    final _bloc = await bloc();
-    Stream stream = _bloc.stream.where((event) => event != null);
+    final blocInstance = await bloc();
+    Stream stream = blocInstance.stream.where((event) => event != null);
 
     if (transform != null) {
-      stream = stream.map((event) => transform(_bloc, event!));
+      stream = stream.map((event) => transform(blocInstance, event!));
     }
 
     if (testDistinctStatesOnly) {
@@ -76,18 +76,18 @@ void testBloc<R extends Bloc<S>, S>(
     );
 
     if (expectBefore != null) {
-      await expectBefore(_bloc);
+      await expectBefore(blocInstance);
     }
 
-    job ??= (_bloc) async {};
+    job ??= (blocInstance) async {};
 
-    await job!(_bloc);
+    await job!(blocInstance);
 
     // ignore: invalid_use_of_visible_for_testing_member
-    await _bloc.close();
+    await blocInstance.close();
 
     if (expectAfter != null) {
-      await expectAfter(_bloc);
+      await expectAfter(blocInstance);
     }
   }, timeout: Timeout(timeout));
 }

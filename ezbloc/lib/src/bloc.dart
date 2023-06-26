@@ -118,7 +118,9 @@ abstract class Bloc<S> {
   @protected
   @mustCallSuper
   void notifyListeners(BlocEventType type) {
-    _eventListeners.forEach((e) => e(type));
+    for (var e in _eventListeners) {
+      e(type);
+    }
   }
 
   /// Called to calculate the new state
@@ -145,7 +147,7 @@ abstract class Bloc<S> {
       event ??= _caller;
     }
 
-    final _stream = this._stream;
+    final stream = this._stream;
     _monitor.onEvent(this, _state, update, event: event);
     final next = nextState(_state, update);
     _isBusy = false;
@@ -156,8 +158,8 @@ abstract class Bloc<S> {
     }
 
     _state = next;
-    if (_stream != null) {
-      _stream.add(_state);
+    if (stream != null) {
+      stream.add(_state);
       notifyListeners(BlocEventType.stateChange);
       _monitor.onBroadcast(this, _state, event: event);
     }
