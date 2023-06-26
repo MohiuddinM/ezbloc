@@ -74,4 +74,6 @@ final class BlocResolver<T extends Bloc, R> {
 
   /// Removes all cached blocs of all types
   static void clearAllCaches() => _cache.clear();
+
+  static Iterable<Bloc> get cachedBlocs => _cache.values;
 }
