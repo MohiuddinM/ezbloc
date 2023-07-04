@@ -1,3 +1,7 @@
+## 5.1.1
+
+- move deactivation delay into new class
+
 ## 5.1.0
 
 - make deactivation delay adjustable
