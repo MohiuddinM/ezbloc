@@ -83,6 +83,10 @@ abstract class Bloc<S> {
 
     _stream!.onCancel = () {
       if (_shouldDeactivate && _deactivationTimer == null) {
+        if (BlocConfig.deactivationDelay == Duration.zero) {
+          return onDeactivate();
+        }
+
         _deactivationTimer = Timer(BlocConfig.deactivationDelay, () {
           if (_shouldDeactivate) {
             onDeactivate();
