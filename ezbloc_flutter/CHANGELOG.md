@@ -1,3 +1,8 @@
+## 0.13.0
+
+- add BuildContext extension methods
+- update dependencies
+
 ## 0.12.6
 
 - add BlocResolver.cachedBlocs getter
