@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  ezbloc: ^5.1.1
+  ezbloc: ^5.1.2
   rxdart: '>=0.26.0 <2.0.0'
   hive: ^2.0.0
   path: ^1.8.0
