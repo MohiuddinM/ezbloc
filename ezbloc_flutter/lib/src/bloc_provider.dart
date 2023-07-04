@@ -2,6 +2,10 @@ import 'package:flutter/widgets.dart';
 
 import 'bloc.dart';
 
+/// [StatefulWidget] that is used to provide a [Bloc] to its [child] tree.
+///
+/// Internally uses an [InheritedWidget] to give O(1) access to the entire
+/// subtree. This gets disposed automatically when there are no more dependents
 class BlocProvider<T extends Bloc> extends StatefulWidget {
   final T bloc;
   final Widget child;
@@ -9,8 +13,8 @@ class BlocProvider<T extends Bloc> extends StatefulWidget {
   const BlocProvider({Key? key, required this.bloc, required this.child})
       : super(key: key);
 
-  static T of<T extends Bloc>(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<_Provider<T>>()!.bloc;
+  static T? of<T extends Bloc>(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_Provider<T>>()?.bloc;
   }
 
   @override
@@ -37,5 +41,5 @@ class _Provider<T extends Bloc> extends InheritedWidget {
   }) : super(key: key, child: child);
 
   @override
-  bool updateShouldNotify(_Provider old) => old.bloc != this.bloc;
+  bool updateShouldNotify(_Provider old) => old.bloc != bloc;
 }
