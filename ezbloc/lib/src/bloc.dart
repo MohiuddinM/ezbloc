@@ -28,6 +28,14 @@ abstract class Bloc<S> {
     defaultValue: false,
   );
 
+  /// Duration to wait before deactivating this [Bloc]
+  ///
+  /// If a new dependent comes in within this time, then the bloc will not be
+  /// deactivated. This is really helpful during widget rebuilds when a widget
+  /// disconnects and reconnects immediately. With this delay these rebuilds
+  /// will not affect the performance of the bloc.
+  static Duration deactivationDelay = const Duration(seconds: 2);
+
   final BlocMonitor _monitor;
 
   dynamic _error;
@@ -62,7 +70,7 @@ abstract class Bloc<S> {
 
     _stream!.onCancel = () {
       if (_shouldDeactivate && _deactivationTimer == null) {
-        _deactivationTimer = Timer(const Duration(seconds: 2), () {
+        _deactivationTimer = Timer(deactivationDelay, () {
           if (_shouldDeactivate) {
             onDeactivate();
           }
