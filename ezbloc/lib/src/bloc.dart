@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ezbloc/src/bloc_config.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -28,16 +29,7 @@ abstract class Bloc<S> {
     defaultValue: false,
   );
 
-  /// Duration to wait before deactivating this [Bloc]
-  ///
-  /// If a new dependent comes in within this time, then the bloc will not be
-  /// deactivated. This is really helpful during widget rebuilds when a widget
-  /// disconnects and reconnects immediately. With this delay these rebuilds
-  /// will not affect the performance of the bloc.
-  static Duration deactivationDelay = const Duration(seconds: 2);
-
   final BlocMonitor _monitor;
-
   dynamic _error;
   bool _isBusy = true;
   BehaviorSubject<S?>? _stream;
@@ -61,34 +53,6 @@ abstract class Bloc<S> {
 
   bool get _shouldDeactivate => _stream != null && !_stream!.hasListener;
 
-  /// Called when [Bloc] get the first listener and [stream] is created
-  @mustCallSuper
-  void onActivate() {
-    _stream = _state == null
-        ? BehaviorSubject<S?>()
-        : BehaviorSubject<S?>.seeded(_state);
-
-    _stream!.onCancel = () {
-      if (_shouldDeactivate && _deactivationTimer == null) {
-        _deactivationTimer = Timer(deactivationDelay, () {
-          if (_shouldDeactivate) {
-            onDeactivate();
-          }
-          _deactivationTimer = null;
-        });
-      }
-    };
-  }
-
-  /// Called when [Bloc] has no more listeners and [stream] is being closed
-  @mustCallSuper
-  void onDeactivate() {
-    notifyListeners(BlocEventType.streamClosed);
-    _monitor.onStreamDispose(this);
-    _stream!.close();
-    _stream = null;
-  }
-
   bool get hasState => _state != null;
 
   S get state {
@@ -109,6 +73,34 @@ abstract class Bloc<S> {
 
   /// Callback functions that will be called on bloc updated
   final _eventListeners = <BlocListener>[];
+
+  /// Called when [Bloc] get the first listener and [stream] is created
+  @mustCallSuper
+  void onActivate() {
+    _stream = _state == null
+        ? BehaviorSubject<S?>()
+        : BehaviorSubject<S?>.seeded(_state);
+
+    _stream!.onCancel = () {
+      if (_shouldDeactivate && _deactivationTimer == null) {
+        _deactivationTimer = Timer(BlocConfig.deactivationDelay, () {
+          if (_shouldDeactivate) {
+            onDeactivate();
+          }
+          _deactivationTimer = null;
+        });
+      }
+    };
+  }
+
+  /// Called when [Bloc] has no more listeners and [stream] is being closed
+  @mustCallSuper
+  void onDeactivate() {
+    notifyListeners(BlocEventType.streamClosed);
+    _monitor.onStreamDispose(this);
+    _stream!.close();
+    _stream = null;
+  }
 
   /// Adds a callback function to the list on active callbacks
   ///
