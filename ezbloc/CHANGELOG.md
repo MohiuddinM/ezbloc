@@ -1,3 +1,7 @@
+## 5.1.2
+
+- handle case when deactivation delay is 0
+
 ## 5.1.1
 
 - move deactivation delay into new class
