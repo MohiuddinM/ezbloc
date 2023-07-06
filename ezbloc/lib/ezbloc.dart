@@ -7,3 +7,4 @@ export 'src/bloc_monitor.dart';
 export 'src/bloc_test_.dart';
 export 'src/bloc_listener_callback.dart';
 export 'src/bloc_event_type.dart';
+export 'src/bloc_config.dart';
