@@ -1,3 +1,7 @@
+## 5.1.3
+
+- export bloc config
+
 ## 5.1.2
 
 - handle case when deactivation delay is 0
